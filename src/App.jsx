@@ -105,8 +105,8 @@ function App() {
   const progressPercent = words.length > 0 ? (currentIndex / words.length) * 100 : 0;
 
   return (
-    /* 🛠️ 가로 스크롤 해제 패치: 최외각 너비를 width: '94%', maxWidth: '440px'로 지정하여 기기 양측면 가로 오버플로우를 완전히 예방합니다. */
-    <div style={{ width: '94%', maxWidth: '440px', padding: '20px 0', boxSizing: 'border-box', margin: '0 auto' }}>
+    /* 원래의 가장 안정적인 가변형 반응형 상단 루트 스택(maxWidth: 500px, width: 100%)으로 복원 */
+    <div style={{ maxWidth: '500px', width: '100%', padding: '20px 12px', boxSizing: 'border-box', margin: '0 auto' }}>
       
       {/* 글로벌 상단 홈 버튼 */}
       {currentMode !== 'landing' && !showPasswordModal && (
@@ -179,9 +179,9 @@ function App() {
           </div>
 
           {teacherStep === 1 ? (
-            /* [설정 - 1단계] 넓고 일관적인 가로 레이아웃 비율 및 쾌적한 상하 마진(35px, 45px) 완벽 유지 */
-            <div style={{ padding: '15px 0', width: '100%' }}>
-              <div style={{ marginBottom: '35px', width: '100%' }}>
+            /* 🛠️ 1단계 전용 복원 패치: 원래 정렬 방식(flex 정렬 및 자식 크기 한정)으로 되돌려 1단계 대시보드 폭을 예쁘게 컴팩트 수축시켰으며, 요청하신 쾌적한 이전 상하 정렬 여백 간격(35px, 45px)을 보존했습니다. */
+            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '15px 0', width: '100%' }}>
+              <div style={{ marginBottom: '35px', width: '100%', maxWidth: '340px' }}>
                 <label style={{ display: 'block', color: '#555555', fontSize: '13px', fontWeight: 'bold', marginBottom: '12px', textAlign: 'center' }}>TARGET DATE</label>
                 <input 
                   type="date" 
@@ -191,7 +191,7 @@ function App() {
                 />
               </div>
 
-              <div style={{ marginBottom: '45px', width: '100%', textAlign: 'center' }}>
+              <div style={{ marginBottom: '45px', width: '100%', maxWidth: '340px', textAlign: 'center' }}>
                 <label style={{ display: 'block', color: '#555555', fontSize: '13px', fontWeight: 'bold', marginBottom: '12px' }}>CARD COUNT (개수 지정)</label>
                 <input 
                   type="number" 
@@ -204,7 +204,7 @@ function App() {
                 <p style={{ color: '#555555', fontSize: '12px', marginTop: '10px', margin: '10px 0 0 0' }}>오늘 배울 단어들의 총 수량을 정합니다.</p>
               </div>
 
-              <div style={{ width: '100%' }}>
+              <div style={{ width: '100%', maxWidth: '340px' }}>
                 <button onClick={proceedToStep2} className="mini-start-btn">
                   다음 단계로 이동 ➡️
                 </button>
