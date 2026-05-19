@@ -105,8 +105,8 @@ function App() {
   const progressPercent = words.length > 0 ? (currentIndex / words.length) * 100 : 0;
 
   return (
-    /* ⛩️ 대시보드 너비 동기화의 핵심 패치: maxWidth 기반에서 명시적 가속화 기법(width: '460px', maxWidth: '100%')으로 전면 수정 */
-    <div style={{ width: '460px', maxWidth: '100%', padding: '20px 12px', boxSizing: 'border-box', margin: '0 auto' }}>
+    /* 🛠️ 가로 스크롤 해제 패치: 최외각 너비를 width: '94%', maxWidth: '440px'로 지정하여 기기 양측면 가로 오버플로우를 완전히 예방합니다. */
+    <div style={{ width: '94%', maxWidth: '440px', padding: '20px 0', boxSizing: 'border-box', margin: '0 auto' }}>
       
       {/* 글로벌 상단 홈 버튼 */}
       {currentMode !== 'landing' && !showPasswordModal && (
@@ -179,7 +179,7 @@ function App() {
           </div>
 
           {teacherStep === 1 ? (
-            /* 🛠️ [설정 - 1단계] 요소들의 가로 너비를 100% 확장하고 위아래 쾌적한 오리지널 마진(35px, 45px) 완벽 전형 복구 */
+            /* [설정 - 1단계] 넓고 일관적인 가로 레이아웃 비율 및 쾌적한 상하 마진(35px, 45px) 완벽 유지 */
             <div style={{ padding: '15px 0', width: '100%' }}>
               <div style={{ marginBottom: '35px', width: '100%' }}>
                 <label style={{ display: 'block', color: '#555555', fontSize: '13px', fontWeight: 'bold', marginBottom: '12px', textAlign: 'center' }}>TARGET DATE</label>

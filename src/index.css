@@ -22,7 +22,7 @@ body {
   background: radial-gradient(circle at top right, #ebe6dc, #f7f5f0);
 }
 
-/* 정갈한 대시보드 메인 박스 (부모 너비를 가득 채우도록 100% 설정) */
+/* 정갈한 대시보드 메인 박스 (부모 너비 컨테이너의 100%를 안정적으로 채움) */
 .dashboard-box {
   background: #ffffff;
   border-radius: 16px;
@@ -87,7 +87,7 @@ body {
   background: #a73838; /* 신사 도리이의 적색 */
   color: #ffffff;
   border: none;
-  padding: 14px 0; /* 단추의 볼륨감 확보 */
+  padding: 14px 0; 
   border-radius: 12px;
   font-weight: bold;
   cursor: pointer;
@@ -99,7 +99,7 @@ body {
   background: #8c2e2e;
 }
 
-/* 3D 카드 플립 스타일 */
+/* 3D 카드 플립 스타일 (뷰포트에 맞춰 유연하게 반응형 축소) */
 .card-container {
   perspective: 1000px;
   width: 100%;
@@ -194,7 +194,7 @@ body {
   border-bottom: 2px solid #a73838;
 }
 
-/* 📱 모바일 기기 반응형 대응 미디어 쿼리 */
+/* 📱 모바일 기기 반응형 대응 미디어 쿼리 패딩 보정 */
 @media (max-width: 480px) {
   .dashboard-box {
     padding: 18px 12px; 
