@@ -1,7 +1,9 @@
 :root {
-  background-color: #f8fafc;
-  color: #1e293b;
-  font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, Roboto, sans-serif;
+  /* 전통 와시(Washi) 종이 느낌의 부드러운 크림빛 아이보리 */
+  background-color: #f7f5f0; 
+  /* 부드러운 먹색 (Sumi Black) */
+  color: #2b2b2b; 
+  font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, 'Noto Serif KR', 'Hiragino Mincho ProN', serif;
 }
 
 body {
@@ -10,34 +12,35 @@ body {
   justify-content: center;
   align-items: center;
   min-height: 100vh;
-  background: radial-gradient(circle at top right, #f1f5f9, #e2e8f0);
+  background: radial-gradient(circle at top right, #ebe6dc, #f7f5f0);
 }
 
-/* 정갈하고 모던한 대시보드 메인 박스 */
+/* 전통 창살 및 대나무 선 느낌의 정갈한 대시보드 메인 박스 */
 .dashboard-box {
   background: #ffffff;
-  border-radius: 24px;
+  border-radius: 16px;
   padding: 30px;
-  border: 1px solid #e2e8f0;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.04), 0 1px 8px rgba(0, 0, 0, 0.02);
+  border: 2px solid #e6dec9; /* 전통적인 직물/가구 톤의 베이지 테두리 */
+  box-shadow: 0 8px 24px rgba(43, 43, 43, 0.04);
 }
 
-/* 첫 화면 역할 선택 카드 */
+/* 첫 화면 역할 선택 카드 (화이트 와시 감성) */
 .role-select-card {
   background: #ffffff;
-  border: 1px solid #e2e8f0;
-  border-radius: 20px;
+  border: 2px solid #e6dec9;
+  border-radius: 12px;
   padding: 30px;
   text-align: center;
   cursor: pointer;
   transition: all 0.3s ease;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.03);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.01);
 }
 
 .role-select-card:hover {
   transform: translateY(-4px);
-  border-color: #005CC5;
-  box-shadow: 0 12px 20px rgba(0, 92, 197, 0.1);
+  border-color: #a73838; /* 전통 주홍/벵가라 적색 */
+  background-color: #fdfcf7;
+  box-shadow: 0 10px 20px rgba(167, 56, 56, 0.08);
 }
 
 /* 학생용 날짜 카드 그리드 */
@@ -50,33 +53,34 @@ body {
 
 .date-card {
   background: #ffffff;
-  border: 1px solid #e2e8f0;
+  border: 1px solid #dcd6cd;
   padding: 20px;
-  border-radius: 16px;
+  border-radius: 12px;
   text-align: center;
   transition: all 0.2s ease;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.01);
+  border-bottom: 3px solid #cbd5e1;
 }
 
 .date-card:hover {
   transform: translateY(-3px);
-  border-color: #005CC5;
-  box-shadow: 0 6px 12px rgba(0, 92, 197, 0.08);
+  border-color: #a73838;
+  border-bottom-color: #a73838;
+  box-shadow: 0 6px 12px rgba(167, 56, 56, 0.06);
 }
 
 .date-label {
   font-size: 14px;
-  color: #475569;
+  color: #4a4a4a;
   margin-bottom: 12px;
   font-weight: 600;
 }
 
 .mini-start-btn {
-  background: #005CC5;
+  background: #a73838; /* 신사 도리이의 적색 */
   color: #ffffff;
   border: none;
   padding: 8px 0;
-  border-radius: 8px;
+  border-radius: 6px;
   font-weight: bold;
   cursor: pointer;
   width: 100%;
@@ -84,10 +88,10 @@ body {
 }
 
 .mini-start-btn:hover {
-  background: #004bb0;
+  background: #8c2e2e;
 }
 
-/* 3D 카드 플립 스타일 보정 */
+/* 3D 카드 플립 스타일 (서책 및 전통 목판화 감성 보정) */
 .card-container {
   perspective: 1000px;
   width: 340px;
@@ -115,35 +119,35 @@ body {
   height: 100%;
   -webkit-backface-visibility: hidden;
   backface-visibility: hidden;
-  border-radius: 20px;
+  border-radius: 12px;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
-  border: 1px solid #e2e8f0;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.04);
 }
 
-/* 앞면 (일본어): 기본 상태 각도 명시 및 상위 z-index 부여 */
+/* 앞면 (일본어 표기): 깨끗한 백색 바탕에 홍색 테두리 조합 */
 .card-front {
   background: #ffffff;
-  color: #005CC5;
+  color: #a73838;
+  border: 2px solid #a73838;
   transform: rotateY(0deg);
   z-index: 2;
 }
 
-/* 뒷면 (뜻) */
+/* 뒷면 (한국어 뜻): 깊은 전통 남색(Aiiro) 직물 위 묵직한 은은한 금박(Kiniro) 조합 */
 .card-back {
-  background: linear-gradient(135deg, #005CC5, #003F8A);
-  color: #ffffff;
-  border-color: #004bb0;
+  background: linear-gradient(135deg, #1b2a4a, #111a30); 
+  color: #c5a059; 
+  border: 2px solid #c5a059;
   transform: rotateY(180deg);
 }
 
-/* 애니메이션 진행 바 */
+/* 애니메이션 진행 바 (한지 베이지 테두리 안의 주홍 잉크 채움 효과) */
 .progress-bar-container {
   width: 100%;
-  background-color: #f1f5f9;
+  background-color: #e6dec9;
   border-radius: 10px;
   height: 8px;
   overflow: hidden;
@@ -151,7 +155,7 @@ body {
 }
 
 .progress-bar-fill {
-  background: linear-gradient(90deg, #3b82f6, #005CC5);
+  background: linear-gradient(90deg, #c5a059, #a73838);
   height: 100%;
   transition: width 0.3s ease;
 }
@@ -166,17 +170,17 @@ body {
 
 .step-dot {
   padding: 6px 14px;
-  border-radius: 20px;
+  border-radius: 30px;
   font-size: 12px;
   font-weight: bold;
-  background: #f1f5f9;
-  color: #64748b;
-  border: 1px solid #e2e8f0;
+  background: #ebe6dc;
+  color: #555555;
+  border: 1px solid #d4ccb6;
 }
 
 .step-dot.active {
-  background: #005CC5;
+  background: #a73838;
   color: #fff;
-  border-color: #005CC5;
-  box-shadow: 0 0 10px rgba(0, 92, 197, 0.15);
+  border-color: #a73838;
+  box-shadow: 0 2px 8px rgba(167, 56, 56, 0.15);
 }
