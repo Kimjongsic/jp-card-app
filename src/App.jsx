@@ -123,18 +123,18 @@ function App() {
       {currentMode === 'landing' && !showPasswordModal && (
         <div>
           <h1 style={{ textAlign: 'center', fontSize: '24px', marginBottom: '40px', fontWeight: '800', letterSpacing: '-0.5px', color: '#2b2b2b' }}>
-            🌸 伝統日本語 FLASH CARD
+            일본어 플래시 카드
           </h1>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
             <div className="role-select-card" onClick={() => setCurrentMode('student')}>
-              <div style={{ fontSize: '40px', marginBottom: '10px' }}>📜</div>
-              <h2 style={{ fontSize: '18px', margin: '0 0 5px 0', color: '#a73838' }}>STUDENT MODE</h2>
+              <div style={{ fontSize: '40px', marginBottom: '10px' }}>👥</div>
+              <h2 style={{ fontSize: '18px', margin: '0 0 5px 0', color: '#a73838' }}>학생 입장</h2>
               <p style={{ color: '#555555', fontSize: '13px', margin: 0 }}>선생님이 등록한 날짜별 서책 카드를 무작위로 학습합니다.</p>
             </div>
 
             <div className="role-select-card" onClick={handleTeacherAccess}>
-              <div style={{ fontSize: '40px', marginBottom: '10px' }}>🖌️</div>
-              <h2 style={{ fontSize: '18px', margin: '0 0 5px 0', color: '#2b2b2b' }}>先生モード</h2>
+              <div style={{ fontSize: '40px', marginBottom: '10px' }}>⚙️</div>
+              <h2 style={{ fontSize: '18px', margin: '0 0 5px 0', color: '#2b2b2b' }}>설정</h2>
               <p style={{ color: '#555555', fontSize: '13px', margin: 0 }}>일자별 학습할 카드 개수와 단어 세트를 정갈하게 생성합니다.</p>
             </div>
           </div>
@@ -144,8 +144,8 @@ function App() {
       {/* 비밀번호 보호 인증 모달 */}
       {showPasswordModal && (
         <div className="dashboard-box" style={{ textAlign: 'center' }}>
-          <h3 style={{ margin: '0 0 10px 0', color: '#2b2b2b' }}>🔑 先生モード 인증</h3>
-          <p style={{ color: '#555555', fontSize: '13px', marginBottom: '20px' }}>보안을 위해 교사 전용 암호를 입력해 주세요.</p>
+          <h3 style={{ margin: '0 0 10px 0', color: '#2b2b2b' }}>🔑 설정 인증</h3>
+          <p style={{ color: '#555555', fontSize: '13px', marginBottom: '20px' }}>보안을 위해 관리자 전용 암호를 입력해 주세요.</p>
           <input 
             type="password" 
             value={passwordInput}
@@ -164,7 +164,7 @@ function App() {
       {/* ==================== 1. 👨‍🏫 TEACHER MODE UI ==================== */}
       {currentMode === 'teacher' && !showPasswordModal && (
         <div className="dashboard-box">
-          <h2 style={{ textAlign: 'center', fontSize: '18px', margin: '0 0 5px 0', color: '#2b2b2b' }}>🖌️ 先生モード : 카드 생성</h2>
+          <h2 style={{ textAlign: 'center', fontSize: '18px', margin: '0 0 5px 0', color: '#2b2b2b' }}>⚙️ 설정 : 카드 생성</h2>
           
           {/* 스텝 비주얼 인디케이터 */}
           <div className="step-indicator">
