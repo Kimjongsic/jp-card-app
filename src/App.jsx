@@ -178,10 +178,11 @@ function App() {
           </div>
 
           {teacherStep === 1 ? (
-            /* 🛠️ [설정 - 1단계] 레이아웃 결함 조치: 블록 레벨 및 margin auto 구조 전환으로 대시보드 234.94px 강제 축소 현상 해결 */
+            /* 🛠️ [설정 - 1단계] 가로폭 최대 확장 및 상하 여백 완벽 복구 패치 */
             <div style={{ padding: '10px 0', width: '100%' }}>
-              <div style={{ marginBottom: '24px', width: '100%', maxWidth: '340px', margin: '0 auto' }}>
-                <label style={{ display: 'block', color: '#555555', fontSize: '12px', fontWeight: 'bold', marginBottom: '8px', textAlign: 'center' }}>TARGET DATE</label>
+              {/* marginBottom을 28px로 늘려 레이블과 입력창 사이의 위아래 간격 확보 */}
+              <div style={{ marginBottom: '28px', width: '100%' }}>
+                <label style={{ display: 'block', color: '#555555', fontSize: '12px', fontWeight: 'bold', marginBottom: '10px', textAlign: 'center' }}>TARGET DATE</label>
                 <input 
                   type="date" 
                   value={teacherDate} 
@@ -190,8 +191,9 @@ function App() {
                 />
               </div>
 
-              <div style={{ marginBottom: '32px', width: '100%', maxWidth: '340px', margin: '0 auto', textAlign: 'center' }}>
-                <label style={{ display: 'block', color: '#555555', fontSize: '12px', fontWeight: 'bold', marginBottom: '8px' }}>CARD COUNT (개수 지정)</label>
+              {/* marginBottom을 36px로 원복하여 다음 단계 버튼과의 수직 간격 균형 최적화 */}
+              <div style={{ marginBottom: '36px', width: '100%', textAlign: 'center' }}>
+                <label style={{ display: 'block', color: '#555555', fontSize: '12px', fontWeight: 'bold', marginBottom: '10px' }}>CARD COUNT (개수 지정)</label>
                 <input 
                   type="number" 
                   value={cardCount} 
@@ -200,10 +202,10 @@ function App() {
                   onChange={(e) => setCardCount(e.target.value)} 
                   style={{ width: '100%', background: '#ffffff', color: '#2b2b2b', border: '2px solid #e6dec9', padding: '12px', borderRadius: '12px', fontSize: '16px', outline: 'none', textAlign: 'center', boxSizing: 'border-box' }}
                 />
-                <p style={{ color: '#555555', fontSize: '12px', marginTop: '8px', margin: '8px 0 0 0' }}>오늘 배울 단어들의 총 수량을 정합니다.</p>
+                <p style={{ color: '#555555', fontSize: '12px', marginTop: '10px', margin: '10px 0 0 0' }}>오늘 배울 단어들의 총 수량을 정합니다.</p>
               </div>
 
-              <div style={{ width: '100%', maxWidth: '340px', margin: '0 auto' }}>
+              <div style={{ width: '100%' }}>
                 <button onClick={proceedToStep2} className="mini-start-btn" style={{ padding: '14px 0', borderRadius: '12px', fontSize: '15px' }}>
                   다음 단계로 이동 ➡️
                 </button>
@@ -247,7 +249,7 @@ function App() {
               </div>
 
               <div style={{ display: 'flex', gap: '10px', justifyContent: 'center' }}>
-                <div style={{ display: 'flex', gap: '10px', width: '100%', maxWidth: '340px' }}>
+                <div style={{ display: 'flex', gap: '10px', width: '100%' }}>
                   <button onClick={() => setTeacherStep(1)} style={{ background: '#ebe6dc', color: '#2b2b2b', border: '1px solid #d4ccb6', padding: '14px', borderRadius: '12px', cursor: 'pointer', fontWeight: 'bold' }}>
                     이전으로
                   </button>

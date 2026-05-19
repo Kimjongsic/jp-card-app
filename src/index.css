@@ -193,10 +193,10 @@ body {
   border-bottom: 2px solid #a73838;
 }
 
-/* 📱 초소형 모바일 기기까지 완전 방어하는 미디어 쿼리 속성 튜닝 */
+/* 📱 모바일 기기 반응형 대응 미디어 쿼리 */
 @media (max-width: 480px) {
   .dashboard-box {
-    padding: 18px 10px; /* 좌우 여백을 타이트하게 줄여 인풋 입력창의 최대 너비 유연하게 획득 */
+    padding: 18px 10px; 
   }
   .card-container {
     width: 100%;
