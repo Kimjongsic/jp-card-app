@@ -178,9 +178,9 @@ function App() {
           </div>
 
           {teacherStep === 1 ? (
-            /* [설정 - 1단계] 날짜 및 카드 개수 정의 (2단계 요소 너비 기준인 max-width: 340px 수평 동기화 패치) */
-            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '10px 0' }}>
-              <div style={{ marginBottom: '24px', width: '100%', maxWidth: '340px' }}>
+            /* 🛠️ [설정 - 1단계] 레이아웃 결함 조치: 블록 레벨 및 margin auto 구조 전환으로 대시보드 234.94px 강제 축소 현상 해결 */
+            <div style={{ padding: '10px 0', width: '100%' }}>
+              <div style={{ marginBottom: '24px', width: '100%', maxWidth: '340px', margin: '0 auto' }}>
                 <label style={{ display: 'block', color: '#555555', fontSize: '12px', fontWeight: 'bold', marginBottom: '8px', textAlign: 'center' }}>TARGET DATE</label>
                 <input 
                   type="date" 
@@ -190,7 +190,7 @@ function App() {
                 />
               </div>
 
-              <div style={{ marginBottom: '32px', width: '100%', maxWidth: '340px', textAlign: 'center' }}>
+              <div style={{ marginBottom: '32px', width: '100%', maxWidth: '340px', margin: '0 auto', textAlign: 'center' }}>
                 <label style={{ display: 'block', color: '#555555', fontSize: '12px', fontWeight: 'bold', marginBottom: '8px' }}>CARD COUNT (개수 지정)</label>
                 <input 
                   type="number" 
@@ -203,7 +203,7 @@ function App() {
                 <p style={{ color: '#555555', fontSize: '12px', marginTop: '8px', margin: '8px 0 0 0' }}>오늘 배울 단어들의 총 수량을 정합니다.</p>
               </div>
 
-              <div style={{ width: '100%', maxWidth: '340px' }}>
+              <div style={{ width: '100%', maxWidth: '340px', margin: '0 auto' }}>
                 <button onClick={proceedToStep2} className="mini-start-btn" style={{ padding: '14px 0', borderRadius: '12px', fontSize: '15px' }}>
                   다음 단계로 이동 ➡️
                 </button>
@@ -336,7 +336,7 @@ function App() {
               <div style={{ textAlign: 'center', padding: '40px 0' }}>
                 <div style={{ fontSize: '50px', marginBottom: '15px' }}>🌸</div>
                 <h3 style={{ fontSize: '22px', margin: '0 0 10px 0', color: '#a73838', letterSpacing: '-0.5px' }}>완료</h3>
-                <p style={{ color: '#555555', fontSize: '14px', marginBottom: '25px' }}>오늘의 서책 단어들을 모두 완벽히 마스터했습니다.</p>
+                <p style={{ color: '#555555', fontSize: '14px', margin: '0 0 25px 0' }}>오늘의 서책 단어들을 모두 완벽히 마스터했습니다.</p>
                 <button 
                   onClick={() => setHasStarted(false)} 
                   style={{ background: '#ebe6dc', color: '#2b2b2b', border: '1px solid #d4ccb6', padding: '12px 30px', borderRadius: '20px', cursor: 'pointer', fontWeight: 'bold' }}
