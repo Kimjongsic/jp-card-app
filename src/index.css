@@ -39,7 +39,7 @@ body {
   box-shadow: 0 10px 25px rgba(0, 255, 204, 0.15);
 }
 
-/* 학생용 날짜 카드 그리드 */
+/* 날짜 카드 그리드 (학생 모드 & 선생님 확인용 공통) */
 .date-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
@@ -150,7 +150,7 @@ body {
   transition: width 0.3s ease;
 }
 
-/* 스텝 표시기 (선생님 모드용) */
+/* 스텝 표시기 */
 .step-indicator {
   display: flex;
   justify-content: center;
@@ -171,4 +171,32 @@ body {
   background: #7c3aed;
   color: #fff;
   box-shadow: 0 0 10px rgba(124, 58, 237, 0.4);
+}
+
+/* 내부 탭 서브 메뉴 */
+.sub-tab-container {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 25px;
+  background: rgba(0,0,0,0.2);
+  padding: 6px;
+  border-radius: 12px;
+}
+
+.sub-tab-btn {
+  flex: 1;
+  background: transparent;
+  color: #a0aec0;
+  border: none;
+  padding: 10px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 14px;
+  transition: all 0.2s;
+}
+
+.sub-tab-btn.active {
+  background: rgba(255,255,255,0.08);
+  color: #fff;
 }
