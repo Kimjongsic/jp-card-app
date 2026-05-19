@@ -105,7 +105,8 @@ function App() {
   const progressPercent = words.length > 0 ? (currentIndex / words.length) * 100 : 0;
 
   return (
-    <div style={{ maxWidth: '500px', width: '100%', padding: '20px', boxSizing: 'border-box' }}>
+    /* 최외각 루트 컨테이너의 모바일 좌우 패딩을 12px로 늘려 기기 가장자리 밀착 방지 */
+    <div style={{ maxWidth: '500px', width: '100%', padding: '20px 12px', boxSizing: 'border-box', margin: '0 auto' }}>
       
       {/* 글로벌 상단 홈 버튼 */}
       {currentMode !== 'landing' && !showPasswordModal && (
@@ -197,7 +198,7 @@ function App() {
                   value={cardCount} 
                   min="1" 
                   max="50"
-                  onChange={(e) => setTeacherCount(e.target.value)} 
+                  onChange={(e) => setCardCount(e.target.value)} 
                   style={{ background: '#ffffff', color: '#2b2b2b', border: '2px solid #e6dec9', padding: '12px', borderRadius: '12px', fontSize: '16px', outline: 'none', textAlign: 'center', width: '100px' }}
                 />
                 <p style={{ color: '#555555', fontSize: '12px', marginTop: '6px' }}>오늘 배울 단어들의 총 수량을 정합니다.</p>
@@ -208,21 +209,19 @@ function App() {
               </button>
             </div>
           ) : (
-            /* [설정 - 2단계] 유동성 단어 리스트 채우기 (모바일 최적화 수정 완료) */
+            /* [설정 - 2단계] 유동성 단어 리스트 채우기 (가로 스크롤 완벽 억제 패치) */
             <div>
               <p style={{ color: '#2b2b2b', fontSize: '13px', textAlign: 'center', marginBottom: '20px' }}>
                 {teacherDate} 세트에 들어갈 <b style={{ color: '#a73838' }}>{cardCount}개</b>의 단어 쌍을 입력하세요.
               </p>
               
-              <div style={{ maxHeight: '230px', overflowY: 'auto', paddingRight: '5px', marginBottom: '20px' }}>
+              {/* paddingRight를 12px로 넓혀 브라우저 스크롤바가 생성되어도 우측 칸이 찌그러지거나 잘리지 않게 방어하고 가로 스크롤을 방지합니다 */}
+              <div style={{ maxHeight: '230px', overflowY: 'auto', overflowX: 'hidden', paddingRight: '12px', marginBottom: '20px' }}>
                 {inputWords.map((word, idx) => (
-                  /* gap 조절로 좌우 여백 확보 */
-                  <div key={idx} style={{ display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '8px' }}>
-                    {/* 🔍 두 자릿수 정렬 보정: display block + width 확장 + 오른쪽 정렬 적용 */}
+                  <div key={idx} style={{ display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '8px', width: '100%' }}>
                     <span style={{ color: '#555555', fontSize: '13px', width: '24px', textAlign: 'right', fontWeight: 'bold', display: 'inline-block', boxSizing: 'border-box', paddingRight: '2px' }}>
                       {idx + 1}
                     </span>
-                    {/* 🔍 모바일 삐져나옴 수정: minWidth: 0 및 간결한 padding/font 크기 할당 */}
                     <input 
                       placeholder="일본어 표기" 
                       value={word.kanji} 
