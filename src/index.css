@@ -1,79 +1,49 @@
-:root {
-  background-color: #0d0e12;
-  color: #ffffff;
-  font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, Roboto, sans-serif;
+.date-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 15px;
 }
 
-body {
-  margin: 0;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  min-height: 100vh;
-  background: radial-gradient(circle at top right, #1e1b4b, #0d0e12);
-}
-
-/* 카드 뒤집기 3D 스타일 */
-.card-container {
-  perspective: 1000px;
-  width: 340px;
-  height: 220px;
-  margin: 30px auto;
-  cursor: pointer;
-}
-
-.card-inner {
-  position: relative;
-  width: 100%;
-  height: 100%;
+.date-card {
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.1);
+  padding: 20px;
+  border-radius: 16px;
   text-align: center;
-  transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
-  transform-style: preserve-3d;
 }
 
-.card-container.flipped .card-inner {
-  transform: rotateY(180deg);
+.date-label {
+  font-size: 14px;
+  color: #9ca3af;
+  margin-bottom: 12px;
 }
 
-.card-front, .card-back {
-  position: absolute;
+.mini-start-btn {
+  background: #00ffcc;
+  border: none;
+  padding: 8px 20px;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
   width: 100%;
-  height: 100%;
-  -webkit-backface-visibility: hidden;
-  backface-visibility: hidden;
-  border-radius: 20px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-  border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
-.card-front {
-  background: linear-gradient(135deg, #1e1e2f, #2a2a40);
-  color: #00ffcc;
-  text-shadow: 0 0 10px rgba(0, 255, 204, 0.5);
-}
-
-.card-back {
-  background: linear-gradient(135deg, #7c3aed, #4c1d95);
-  color: #ffffff;
-  transform: rotateY(180deg);
-}
-
-/* 애니메이션 진행 바 */
-.progress-bar-container {
-  width: 100%;
-  background-color: #1e1e2f;
+.input-dark {
+  flex: 1;
+  background: #14151f;
+  border: 1px solid #232433;
+  color: #fff;
+  padding: 10px;
   border-radius: 10px;
-  height: 8px;
-  overflow: hidden;
-  margin-bottom: 20px;
 }
 
-.progress-bar-fill {
-  background: linear-gradient(90deg, #00ffcc, #7c3aed);
-  height: 100%;
-  transition: width 0.3s ease;
+.save-btn {
+  width: 100%;
+  background: #7c3aed;
+  color: white;
+  padding: 15px;
+  border-radius: 12px;
+  border: none;
+  font-weight: bold;
+  cursor: pointer;
 }
