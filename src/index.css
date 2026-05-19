@@ -87,7 +87,7 @@ body {
   background: #004bb0;
 }
 
-/* 카드 뒤집기 3D 스타일 (모던 인디고 & 화이트 감성) */
+/* 3D 카드 플립 스타일 보정 */
 .card-container {
   perspective: 1000px;
   width: 340px;
@@ -124,15 +124,20 @@ body {
   border: 1px solid #e2e8f0;
 }
 
+/* 앞면 (일본어): 기본 상태 각도 명시 및 상위 z-index 부여 */
 .card-front {
   background: #ffffff;
   color: #005CC5;
+  transform: rotateY(0deg);
+  z-index: 2;
 }
 
+/* 뒷면 (뜻) */
 .card-back {
   background: linear-gradient(135deg, #005CC5, #003F8A);
   color: #ffffff;
   border-color: #004bb0;
+  transform: rotateY(180deg);
 }
 
 /* 애니메이션 진행 바 */

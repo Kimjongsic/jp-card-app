@@ -203,7 +203,7 @@ function App() {
               </button>
             </div>
           ) : (
-            /* [선생님 - 2단계] 유동성 단어 리스트 채우기 (콤팩트 축소 디자인 적용) */
+            /* [선생님 - 2단계] 유동성 단어 리스트 채우기 */
             <div>
               <p style={{ color: '#475569', fontSize: '13px', textAlign: 'center', marginBottom: '20px' }}>
                 {teacherDate} 세트에 들어갈 <b style={{ color: '#005CC5' }}>{cardCount}개</b>의 단어 쌍을 입력하세요.
