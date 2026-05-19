@@ -105,7 +105,8 @@ function App() {
   const progressPercent = words.length > 0 ? (currentIndex / words.length) * 100 : 0;
 
   return (
-    <div style={{ maxWidth: '500px', width: '100%', padding: '20px 12px', boxSizing: 'border-box', margin: '0 auto' }}>
+    /* ⛩️ 대시보드 너비 동기화의 핵심 패치: maxWidth 기반에서 명시적 가속화 기법(width: '460px', maxWidth: '100%')으로 전면 수정 */
+    <div style={{ width: '460px', maxWidth: '100%', padding: '20px 12px', boxSizing: 'border-box', margin: '0 auto' }}>
       
       {/* 글로벌 상단 홈 버튼 */}
       {currentMode !== 'landing' && !showPasswordModal && (
@@ -178,7 +179,7 @@ function App() {
           </div>
 
           {teacherStep === 1 ? (
-            /* 🛠️ [설정 - 1단계] 상하 마진(margin)폭을 대폭 늘려 시원하고 웅장한 이전 정렬 비율로 원복 완료 */
+            /* 🛠️ [설정 - 1단계] 요소들의 가로 너비를 100% 확장하고 위아래 쾌적한 오리지널 마진(35px, 45px) 완벽 전형 복구 */
             <div style={{ padding: '15px 0', width: '100%' }}>
               <div style={{ marginBottom: '35px', width: '100%' }}>
                 <label style={{ display: 'block', color: '#555555', fontSize: '13px', fontWeight: 'bold', marginBottom: '12px', textAlign: 'center' }}>TARGET DATE</label>
@@ -186,7 +187,7 @@ function App() {
                   type="date" 
                   value={teacherDate} 
                   onChange={(e) => setTeacherDate(e.target.value)} 
-                  style={{ width: '100%', background: '#ffffff', color: '#2b2b2b', border: '2px solid #e6dec9', padding: '14px', borderRadius: '12px', fontSize: '16px', outline: 'none', textAlign: 'center', boxSizing: 'border-box' }}
+                  style={{ width: '100%', background: '#ffffff', color: '#2b2b2b', border: '2px solid #e6dec9', padding: '12px', borderRadius: '12px', fontSize: '16px', outline: 'none', textAlign: 'center', boxSizing: 'border-box' }}
                 />
               </div>
 
@@ -198,7 +199,7 @@ function App() {
                   min="1" 
                   max="50"
                   onChange={(e) => setCardCount(e.target.value)} 
-                  style={{ width: '100%', background: '#ffffff', color: '#2b2b2b', border: '2px solid #e6dec9', padding: '14px', borderRadius: '12px', fontSize: '16px', outline: 'none', textAlign: 'center', boxSizing: 'border-box' }}
+                  style={{ width: '100%', background: '#ffffff', color: '#2b2b2b', border: '2px solid #e6dec9', padding: '12px', borderRadius: '12px', fontSize: '16px', outline: 'none', textAlign: 'center', boxSizing: 'border-box' }}
                 />
                 <p style={{ color: '#555555', fontSize: '12px', marginTop: '10px', margin: '10px 0 0 0' }}>오늘 배울 단어들의 총 수량을 정합니다.</p>
               </div>
