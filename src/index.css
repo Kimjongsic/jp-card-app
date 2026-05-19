@@ -1,7 +1,7 @@
 :root {
   /* 전통 와시(Washi) 종이 느낌의 부드러운 크림빛 아이보리 */
   background-color: #f7f5f0; 
-  /* 부드러운 먹색 (Ssumi Black) */
+  /* 부드러운 먹색 (Sumi Black) */
   color: #2b2b2b; 
   /* 세련되고 정갈한 모던 산세리프 폰트 스택 */
   font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, Roboto, 'Helvetica Neue', 'Segoe UI', 'Apple SD Gothic Neo', sans-serif;
@@ -162,7 +162,7 @@ body {
   transition: width 0.3s ease;
 }
 
-/* 스텝 표시기 (선생님 모드용) */
+/* 스텝 표시기 (설정 관리자용) */
 .step-indicator {
   display: flex;
   justify-content: center;

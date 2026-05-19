@@ -21,7 +21,7 @@ function App() {
   const [isFlipped, setIsFlipped] = useState(false);
   const [hasStarted, setHasStarted] = useState(false);
 
-  // 🔒 교사 페이지 비밀번호
+  // 🔒 설정 관리 페이지 비밀번호
   const TEACHER_PASSWORD = "1234";
 
   // 날짜 리스트 초기 바인딩
@@ -50,7 +50,7 @@ function App() {
       setTeacherStep(1); // 진입 시 무조건 1단계부터 시작
     } else {
       alert("❌ 비밀번호가 일치하지 않습니다.");
-    } verification;
+    }
   };
 
   // 교사 1단계 -> 2단계 이동 (개수 확정 및 입력 폼 생성)
@@ -203,7 +203,7 @@ function App() {
               </button>
             </div>
           ) : (
-            /* [선생님 - 2단계] 유동성 단어 리스트 채우기 (콤팩트 축소 디자인) */
+            /* [선생님 - 2단계] 유동성 단어 리스트 채우기 */
             <div>
               <p style={{ color: '#2b2b2b', fontSize: '13px', textAlign: 'center', marginBottom: '20px' }}>
                 {teacherDate} 세트에 들어갈 <b style={{ color: '#a73838' }}>{cardCount}개</b>의 단어 쌍을 입력하세요.
@@ -255,7 +255,7 @@ function App() {
         <div className="dashboard-box">
           {!hasStarted ? (
             <div>
-              <h2 style={{ fontSize: '18px', marginBottom: '5px', color: '#2b2b2b' }}>📜 오늘의 단어 서책</h2>
+              <h2 style={{ fontSize: '18px', marginBottom: '5px', color: '#2b2b2b' }}>📜 플래시 카드 선택</h2>
               <p style={{ color: '#555555', fontSize: '13px', margin: '0 0 20px 0' }}>학습할 일자의 카드 세트를 선택해 주세요.</p>
               
               <div className="date-grid">
@@ -277,7 +277,7 @@ function App() {
             currentIndex < words.length ? (
               <div>
                 <div style={{ display: 'flex', justifyContent: 'space-between', color: '#555555', fontSize: '13px', marginBottom: '8px' }}>
-                  <span>PROGRESS</span>
+                  <span>진행</span>
                   <span style={{ color: '#a73838', fontWeight: 'bold' }}>{currentIndex + 1} / {words.length}</span>
                 </div>
                 
@@ -290,7 +290,7 @@ function App() {
                     <div className="card-front">
                       <span style={{ fontSize: '12px', color: '#555555', letterSpacing: '2px', position: 'absolute', top: '20px' }}>JAPANESE</span>
                       <div style={{ fontSize: '32px', fontWeight: 'bold' }}>{words[currentIndex].kanji}</div>
-                      <span style={{ fontSize: '11px', color: '#94a3b8', position: 'absolute', bottom: '20px' }}>TAP TO FLIP 🔮</span>
+                      <span style={{ fontSize: '11px', color: '#94a3b8', position: 'absolute', bottom: '20px' }}>TAP TO FLIP 🌸</span>
                     </div>
                     <div className="card-back">
                       <span style={{ fontSize: '12px', color: 'rgba(255,255,255,0.6)', letterSpacing: '2px', position: 'absolute', top: '20px' }}>MEANING</span>
@@ -317,7 +317,7 @@ function App() {
                     boxShadow: '0 4px 12px rgba(0,0,0,0.05)'
                   }}
                 >
-                  {isFlipped ? "NEXT CARD ➡️" : "CHECK ANSWER 👀"}
+                  {isFlipped ? "다음 카드 ➡️" : "정답 확인 👀"}
                 </button>
               </div>
             ) : (
