@@ -1,4 +1,4 @@
-/* 모든 요소의 규격 계산법을 테두리 기준으로 통일 (패딩으로 인한 삐져나옴 방지) */
+/* 모든 요소의 박스 크기 계산 모델을 border-box로 선언하여 내부 여백 팽창 방지 */
 *, *::before, *::after {
   box-sizing: border-box;
 }
@@ -193,20 +193,20 @@ body {
   border-bottom: 2px solid #a73838;
 }
 
-/* 📱 모바일 환경 최적화 대응 미디어 쿼리 패치 */
+/* 📱 초소형 모바일 기기까지 완전 방어하는 미디어 쿼리 속성 튜닝 */
 @media (max-width: 480px) {
   .dashboard-box {
-    padding: 20px 14px; /* 내부 패딩을 대폭 줄여 인풋 필드 가로 공간 최대로 확보 */
+    padding: 18px 10px; /* 좌우 여백을 타이트하게 줄여 인풋 입력창의 최대 너비 유연하게 획득 */
   }
   .card-container {
-    width: 100%; /* 너무 작은 스마트폰 화면 대응 */
-    max-width: 340px;
+    width: 100%;
+    max-width: 320px;
     height: 190px;
   }
   .step-indicator {
-    margin-top: 18px;
-    margin-bottom: 24px;
-    gap: 8px;
+    margin-top: 16px;
+    margin-bottom: 20px;
+    gap: 6px;
   }
   .step-dot {
     font-size: 13px;
