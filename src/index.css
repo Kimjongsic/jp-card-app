@@ -1,5 +1,5 @@
 :root {
-  background-color: #0d0e12;
+  background-color: #0b0c10;
   color: #ffffff;
   font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, Roboto, sans-serif;
 }
@@ -10,81 +10,88 @@ body {
   justify-content: center;
   align-items: flex-start;
   min-height: 100vh;
-  background: radial-gradient(circle at top right, #1e1b4b, #0d0e12);
-  padding: 10px;
+  background: radial-gradient(circle at 50% 0%, #151233, #0b0c10);
+  padding: 16px;
   box-sizing: border-box;
 }
 
-/* 모바일 퍼스트 반응형 메인 컨테이너 */
+/* 🔓 테두리를 없애고 시원하게 넓힌 글래스풍 컨테이너 */
 .dashboard-box {
-  background: rgba(255, 255, 255, 0.03);
-  border-radius: 24px;
-  padding: 20px;
-  border: 1px solid rgba(255, 255, 255, 0.05);
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+  background: rgba(255, 255, 255, 0.02);
+  border-radius: 28px;
+  padding: 24px;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
   width: 100%;
   box-sizing: border-box;
 }
 
-/* 첫 화면 역할 선택 카드 */
+/* 역할 선택 대형 카드 (테두리 삭제, 그라데이션 및 부드러운 스케일만 적용) */
 .role-select-card {
-  background: linear-gradient(135deg, #1e1e2f, #14151f);
-  border: 1px solid rgba(255, 255, 255, 0.05);
-  border-radius: 20px;
-  padding: 25px;
+  background: linear-gradient(135deg, rgba(255,255,255,0.03), rgba(255,255,255,0.01));
+  border-radius: 24px;
+  padding: 35px 25px;
   text-align: center;
   cursor: pointer;
-  transition: transform 0.2s ease;
+  transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1), background 0.25s;
 }
 .role-select-card:active {
-  transform: scale(0.98);
+  transform: scale(0.97);
+  background: rgba(255,255,255,0.05);
 }
 
-/* 📱 모바일 최적화 일자별 카드 레이아웃 (한 줄에 무조건 하나씩 크고 선명하게 배치) */
+/* 📱 대폭 확장된 일자별 세로 카드 뷰 (한 줄에 하나씩 웅장하게) */
 .date-list-vertical {
   display: flex;
   flex-direction: column;
-  gap: 12px;
-  margin-top: 15px;
+  gap: 16px;
+  margin-top: 20px;
   width: 100%;
 }
 
 .date-card-large {
-  background: linear-gradient(135deg, #14151f, #1e1b4b);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  padding: 22px;
-  border-radius: 16px;
+  background: linear-gradient(90deg, rgba(255,255,255,0.04), rgba(255,255,255,0.01));
+  padding: 28px 24px; /* 여백을 크게 늘려 시원한 공간감 확보 */
+  border-radius: 20px;
   display: flex;
   justify-content: space-between;
   align-items: center;
   box-sizing: border-box;
   width: 100%;
+  box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+  transition: transform 0.2s;
+}
+.date-card-large:active {
+  transform: scale(0.99);
 }
 
 .date-label {
-  font-size: 16px;
+  font-size: 18px; /* 날짜 글씨 확대 */
   color: #ffffff;
-  font-weight: bold;
+  font-weight: 700;
+  letter-spacing: 0.5px;
 }
 
 .mini-start-btn {
   background: #00ffcc;
-  color: #000;
+  color: #0b0c10;
   border: none;
-  padding: 10px 24px;
-  border-radius: 10px;
-  font-weight: bold;
+  padding: 12px 32px; /* 버튼을 모바가 터치하기 쉽게 확장 */
+  border-radius: 12px;
+  font-weight: 800;
   cursor: pointer;
-  font-size: 14px;
+  font-size: 15px;
+  box-shadow: 0 4px 12px rgba(0, 255, 204, 0.3);
 }
 
-/* 3D 플립 카드 (너비 % 환산으로 스마트폰 기종별 자동 크기 조절) */
+/* 🔮 대형화된 반응형 3D 플립 카드 슬롯 (PC/모바일 유동적 대응) */
 .card-container {
-  perspective: 1000px;
+  perspective: 1200px;
   width: 100%;
-  max-width: 360px;
-  height: 220px;
-  margin: 25px auto;
+  /* 스마트폰에서는 충실하게 꽉 차고 PC 브라우저 환경에서는 시원하게 커집니다 */
+  height: clamp(240px, 45vh, 320px); 
+  margin: 30px auto;
   cursor: pointer;
 }
 
@@ -93,7 +100,7 @@ body {
   width: 100%;
   height: 100%;
   text-align: center;
-  transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: transform 0.55s cubic-bezier(0.34, 1.56, 0.64, 1); /* 탄성 있는 플립 효과 */
   transform-style: preserve-3d;
 }
 
@@ -101,76 +108,100 @@ body {
   transform: rotateY(180deg);
 }
 
-/* 🔍 글자 선명도 개선 적용 파트 */
+/* 🔍 완벽하게 선명한 고해상도 그래픽 카드 패널 (테두리 완전 삭제) */
 .card-front, .card-back {
   position: absolute;
   width: 100%;
   height: 100%;
   backface-visibility: hidden;
   -webkit-backface-visibility: hidden;
-  border-radius: 20px;
+  border-radius: 24px;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  /* 하드웨어 가속 처리로 모바일 렌더링 글자 흐림(Blur) 전면 방지 */
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+  /* 흐림 보정 하드웨어 가속 */
   transform: translateZ(0); 
-  -webkit-font-smoothing: antialiased;
+  -webkit-transform: translateZ(0);
+  will-change: transform;
 }
 
 .card-front {
-  background: linear-gradient(135deg, #1e1e2f, #2a2a40);
+  background: linear-gradient(135deg, #161722, #252637);
   color: #00ffcc;
-  /* 텍스트 섀도우 해상도 왜곡 제어 */
-  text-shadow: 0 2px 4px rgba(0, 255, 204, 0.2); 
 }
 
 .card-back {
-  background: linear-gradient(135deg, #7c3aed, #4c1d95);
+  background: linear-gradient(135deg, #6d28d9, #4c1d95);
   color: #ffffff;
   transform: rotateY(180deg) translateZ(0);
 }
 
-/* 진행도 Bar */
-.progress-bar-container {
+/* 인게임 하단 핵심 액션 버튼 */
+.action-btn-main {
   width: 100%;
-  background-color: #1e1e2f;
+  border: none;
+  padding: 16px;
+  border-radius: 16px;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+  transition: background 0.2s, color 0.2s;
+}
+
+/* 무한 스크롤 스타일 서브 인풋 */
+.input-dark {
+  flex: 1;
+  background: rgba(255,255,255,0.03);
+  border: none;
+  color: #fff;
+  padding: 12px;
   border-radius: 10px;
-  height: 8px;
-  overflow: hidden;
-  margin-bottom: 25px;
+  font-size: 15px;
+  outline: none;
+}
+.input-dark:focus {
+  background: rgba(255,255,255,0.06);
 }
 
-.progress-bar-fill {
-  background: linear-gradient(90deg, #00ffcc, #7c3aed);
-  height: 100%;
-  transition: width 0.3s ease;
-}
-
-/* 선생님 대형 메뉴 버튼 */
+/* 상단 탭 메뉴 버튼 */
 .teacher-main-btn {
-  background: linear-gradient(135deg, #1e1e2f, #2d1b4e);
-  border: 1px solid rgba(124, 58, 237, 0.3);
-  border-radius: 18px;
-  padding: 25px;
+  background: rgba(255,255,255,0.02);
+  border: none;
+  border-radius: 20px;
+  padding: 26px 20px;
   color: white;
   font-size: 16px;
   font-weight: bold;
   cursor: pointer;
   width: 100%;
-  text-align: left;
   display: flex;
   justify-content: space-between;
   align-items: center;
   box-sizing: border-box;
+  transition: background 0.2s;
 }
 .teacher-main-btn:active {
-  background: #251642;
+  background: rgba(255,255,255,0.06);
 }
 
-/* 타이틀 정렬 및 아이콘 전용 홈 버튼 세트 */
+/* 진행 스케일 바 */
+.progress-bar-container {
+  width: 100%;
+  background-color: rgba(255,255,255,0.03);
+  border-radius: 10px;
+  height: 6px;
+  overflow: hidden;
+  margin-bottom: 25px;
+}
+.progress-bar-fill {
+  background: linear-gradient(90deg, #00ffcc, #7c3aed);
+  height: 100%;
+  transition: width 0.25s ease;
+}
+
 .header-row {
   display: flex;
   justify-content: space-between;
@@ -180,12 +211,12 @@ body {
 }
 
 .home-icon-btn {
-  background: rgba(255,255,255,0.06);
-  border: 1px solid rgba(255,255,255,0.1);
+  background: rgba(255,255,255,0.04);
+  border: none;
   color: white;
   font-size: 18px;
-  width: 40px;
-  height: 40px;
+  width: 42px;
+  height: 42px;
   border-radius: 50%;
   display: flex;
   justify-content: center;
