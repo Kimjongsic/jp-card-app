@@ -23,15 +23,32 @@ body {
   box-sizing: border-box;
 }
 
-/* 메인 패널 */
+/* 🎯 개선: 모든 창의 크기를 홈 화면(약 600px)과 동일하게 고정하여 쪼그라듦 방지 */
 .dashboard-box {
   background: var(--panel-bg);
   border-radius: 24px;
   padding: 32px 24px;
   box-shadow: 0 12px 36px rgba(0, 0, 0, 0.06);
   width: 100%;
+  min-height: 600px; /* 홈 화면과 동일한 기준 높이 강제 고정 */
+  display: flex;
+  flex-direction: column;
   box-sizing: border-box;
   border: 1px solid #FFFFFF;
+}
+
+/* 내부 콘텐츠를 유동적으로 채워주는 래퍼 */
+.content-wrapper {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.content-wrapper-top {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
 }
 
 .role-select-card {
@@ -97,11 +114,10 @@ body {
   background: var(--accent-red);
 }
 
-/* 🎯 개선: 글자 삐져나옴 방지 및 유동적 카드 높이 최적화 */
 .card-container {
   perspective: 1200px;
   width: 100%; 
-  height: clamp(340px, 50vh, 480px); /* 화면 비율에 맞게 안정적으로 꽉 차게 조절 */
+  height: clamp(300px, 45vh, 420px); 
   margin: 20px 0 28px 0;
   cursor: pointer;
 }
@@ -135,7 +151,7 @@ body {
   will-change: transform;
   padding: 24px;
   box-sizing: border-box;
-  overflow: hidden; /* 영역 밖으로 나가는 요소 차단 */
+  overflow: hidden;
 }
 
 .card-front {
@@ -160,31 +176,33 @@ body {
   font-weight: 700;
   cursor: pointer;
   transition: all 0.2s ease;
+  margin-top: auto; /* 하단에 착 달라붙도록 */
 }
 
-.input-row-container {
+/* 🎯 개선: 너무 크던 세트 만들기 창을 얄쌍하고 세련되게 압축 */
+.input-row-container-compact {
   display: flex;
-  gap: 12px;
-  margin-bottom: 12px;
+  gap: 8px;
+  margin-bottom: 8px;
   align-items: center;
   width: 100%;
   box-sizing: border-box;
 }
 
-.input-light {
+.input-light-compact {
   flex: 1;
   min-width: 0;
   background: #F9F8F6;
   border: 1px solid var(--border-color);
   color: var(--text-main);
-  padding: 14px 16px;
-  border-radius: 12px;
-  font-size: 15px;
+  padding: 12px 14px;
+  border-radius: 10px;
+  font-size: 14px;
   outline: none;
   box-sizing: border-box;
   transition: border 0.2s;
 }
-.input-light:focus {
+.input-light-compact:focus {
   border-color: var(--accent-blue);
   background: #FFFFFF;
 }
@@ -225,7 +243,6 @@ body {
   transition: width 0.3s ease;
 }
 
-/* 🎯 개선: 예쁜 상단 네비게이션 헤더 및 아이콘 버튼 스타일 */
 .header-row {
   display: flex;
   justify-content: space-between;
