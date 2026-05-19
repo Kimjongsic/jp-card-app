@@ -178,19 +178,19 @@ function App() {
           </div>
 
           {teacherStep === 1 ? (
-            /* [설정 - 1단계] 날짜 및 카드 개수 정의 */
-            <div style={{ textAlign: 'center', padding: '10px 0' }}>
-              <div style={{ marginBottom: '20px' }}>
-                <label style={{ display: 'block', color: '#555555', fontSize: '12px', fontWeight: 'bold', marginBottom: '8px' }}>TARGET DATE</label>
+            /* [설정 - 1단계] 날짜 및 카드 개수 정의 (2단계 요소 너비 기준인 max-width: 340px 수평 동기화 패치) */
+            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '10px 0' }}>
+              <div style={{ marginBottom: '24px', width: '100%', maxWidth: '340px' }}>
+                <label style={{ display: 'block', color: '#555555', fontSize: '12px', fontWeight: 'bold', marginBottom: '8px', textAlign: 'center' }}>TARGET DATE</label>
                 <input 
                   type="date" 
                   value={teacherDate} 
                   onChange={(e) => setTeacherDate(e.target.value)} 
-                  style={{ background: '#ffffff', color: '#2b2b2b', border: '2px solid #e6dec9', padding: '12px', borderRadius: '12px', fontSize: '16px', outline: 'none', textAlign: 'center' }}
+                  style={{ width: '100%', background: '#ffffff', color: '#2b2b2b', border: '2px solid #e6dec9', padding: '12px', borderRadius: '12px', fontSize: '16px', outline: 'none', textAlign: 'center', boxSizing: 'border-box' }}
                 />
               </div>
 
-              <div style={{ marginBottom: '30px' }}>
+              <div style={{ marginBottom: '32px', width: '100%', maxWidth: '340px', textAlign: 'center' }}>
                 <label style={{ display: 'block', color: '#555555', fontSize: '12px', fontWeight: 'bold', marginBottom: '8px' }}>CARD COUNT (개수 지정)</label>
                 <input 
                   type="number" 
@@ -198,14 +198,16 @@ function App() {
                   min="1" 
                   max="50"
                   onChange={(e) => setCardCount(e.target.value)} 
-                  style={{ background: '#ffffff', color: '#2b2b2b', border: '2px solid #e6dec9', padding: '12px', borderRadius: '12px', fontSize: '16px', outline: 'none', textAlign: 'center', width: '100px' }}
+                  style={{ width: '100%', background: '#ffffff', color: '#2b2b2b', border: '2px solid #e6dec9', padding: '12px', borderRadius: '12px', fontSize: '16px', outline: 'none', textAlign: 'center', boxSizing: 'border-box' }}
                 />
-                <p style={{ color: '#555555', fontSize: '12px', marginTop: '6px' }}>오늘 배울 단어들의 총 수량을 정합니다.</p>
+                <p style={{ color: '#555555', fontSize: '12px', marginTop: '8px', margin: '8px 0 0 0' }}>오늘 배울 단어들의 총 수량을 정합니다.</p>
               </div>
 
-              <button onClick={proceedToStep2} className="mini-start-btn" style={{ padding: '14px 0', borderRadius: '12px', fontSize: '15px' }}>
-                다음 단계로 이동 ➡️
-              </button>
+              <div style={{ width: '100%', maxWidth: '340px' }}>
+                <button onClick={proceedToStep2} className="mini-start-btn" style={{ padding: '14px 0', borderRadius: '12px', fontSize: '15px' }}>
+                  다음 단계로 이동 ➡️
+                </button>
+              </div>
             </div>
           ) : (
             /* [설정 - 2단계] 유동성 단어 리스트 채우기 */
@@ -214,15 +216,12 @@ function App() {
                 {teacherDate} 세트에 들어갈 <b style={{ color: '#a73838' }}>{cardCount}개</b>의 단어 쌍을 입력하세요.
               </p>
               
-              {/* paddingRight 확보 및 overflowX 통제로 모바일 세로 스크롤 발생 시 좌우 뒤틀림을 완벽 차단 */}
               <div style={{ maxHeight: '230px', overflowY: 'auto', overflowX: 'hidden', paddingRight: '8px', marginBottom: '20px' }}>
                 {inputWords.map((word, idx) => (
                   <div key={idx} style={{ display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '8px', width: '100%' }}>
-                    {/* flexShrink 지정을 통해 화면 축소 시 번호 레이아웃 깨짐을 방어 */}
                     <span style={{ color: '#555555', fontSize: '13px', width: '24px', textAlign: 'right', fontWeight: 'bold', display: 'inline-block', boxSizing: 'border-box', paddingRight: '2px', flexShrink: 0 }}>
                       {idx + 1}
                     </span>
-                    {/* width 100%와 명시적인 box-sizing 부여를 통해 어떠한 브라우저 엔진에서도 뷰포트 맞춤 폭 조정 고정 */}
                     <input 
                       placeholder="일본어 표기" 
                       value={word.kanji} 
@@ -247,13 +246,15 @@ function App() {
                 ))}
               </div>
 
-              <div style={{ display: 'flex', gap: '10px' }}>
-                <button onClick={() => setTeacherStep(1)} style={{ background: '#ebe6dc', color: '#2b2b2b', border: '1px solid #d4ccb6', padding: '14px', borderRadius: '12px', cursor: 'pointer', fontWeight: 'bold' }}>
-                  이전으로
-                </button>
-                <button onClick={handleSaveDeck} style={{ flex: 1, background: '#a73838', color: '#fff', border: 'none', padding: '14px', borderRadius: '12px', fontSize: '15px', fontWeight: 'bold', cursor: 'pointer', boxShadow: '0 4px 14px rgba(167, 58, 237, 0.15)' }}>
-                  최종 덱 업로드 🚀
-                </button>
+              <div style={{ display: 'flex', gap: '10px', justifyContent: 'center' }}>
+                <div style={{ display: 'flex', gap: '10px', width: '100%', maxWidth: '340px' }}>
+                  <button onClick={() => setTeacherStep(1)} style={{ background: '#ebe6dc', color: '#2b2b2b', border: '1px solid #d4ccb6', padding: '14px', borderRadius: '12px', cursor: 'pointer', fontWeight: 'bold' }}>
+                    이전으로
+                  </button>
+                  <button onClick={handleSaveDeck} style={{ flex: 1, background: '#a73838', color: '#fff', border: 'none', padding: '14px', borderRadius: '12px', fontSize: '15px', fontWeight: 'bold', cursor: 'pointer', boxShadow: '0 4px 14px rgba(167, 58, 237, 0.15)' }}>
+                    최종 덱 업로드 🚀
+                  </button>
+                </div>
               </div>
             </div>
           )}
