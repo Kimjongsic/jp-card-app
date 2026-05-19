@@ -105,8 +105,7 @@ function App() {
   const progressPercent = words.length > 0 ? (currentIndex / words.length) * 100 : 0;
 
   return (
-    /* 최외각 감싸는 레이아웃 상자의 너비를 시원하게 max 480px로 통일 */
-    <div style={{ width: '100%', maxWidth: '480px', padding: '20px 16px', boxSizing: 'border-box', margin: '0 auto' }}>
+    <div style={{ maxWidth: '500px', width: '100%', padding: '20px 12px', boxSizing: 'border-box', margin: '0 auto' }}>
       
       {/* 글로벌 상단 홈 버튼 */}
       {currentMode !== 'landing' && !showPasswordModal && (
@@ -122,7 +121,7 @@ function App() {
 
       {/* ==================== 0. LANDING VIEW (역할 선택 첫 화면) ==================== */}
       {currentMode === 'landing' && !showPasswordModal && (
-        <div className="dashboard-box">
+        <div>
           <h1 style={{ textAlign: 'center', fontSize: '24px', marginBottom: '40px', fontWeight: '800', letterSpacing: '-0.5px', color: '#2b2b2b' }}>
             🌸 일본어 플래시 카드
           </h1>
@@ -156,7 +155,7 @@ function App() {
             style={{ background: '#ffffff', border: '2px solid #e6dec9', color: '#2b2b2b', padding: '12px', borderRadius: '10px', width: '80%', textAlign: 'center', outline: 'none', marginBottom: '20px' }}
           />
           <div style={{ display: 'flex', gap: '10px', justifyContent: 'center' }}>
-            <button onClick={verifyPassword} className="mini-start-btn" style={{ width: '80px', padding: '8px 0', borderRadius: '6px' }}>확인</button>
+            <button onClick={verifyPassword} className="mini-start-btn" style={{ width: '80px' }}>확인</button>
             <button onClick={() => setShowPasswordModal(false)} style={{ background: '#ebe6dc', color: '#2b2b2b', border: 'none', padding: '8px 16px', borderRadius: '8px', cursor: 'pointer', fontWeight: '600' }}>취소</button>
           </div>
         </div>
@@ -179,10 +178,10 @@ function App() {
           </div>
 
           {teacherStep === 1 ? (
-            /* [설정 - 1단계] 가로 전체폭 충전 및 정갈한 상하마진 비율 완벽 유지 */
-            <div style={{ padding: '15px 0', width: '100%' }}>
-              <div style={{ marginBottom: '35px', width: '100%' }}>
-                <label style={{ display: 'block', color: '#555555', fontSize: '13px', fontWeight: 'bold', marginBottom: '12px', textAlign: 'center' }}>TARGET DATE</label>
+            /* [설정 - 1단계] 날짜 및 카드 개수 정의 (2단계 요소 너비 기준인 max-width: 340px 수평 동기화 패치) */
+            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '10px 0' }}>
+              <div style={{ marginBottom: '24px', width: '100%', maxWidth: '340px' }}>
+                <label style={{ display: 'block', color: '#555555', fontSize: '12px', fontWeight: 'bold', marginBottom: '8px', textAlign: 'center' }}>TARGET DATE</label>
                 <input 
                   type="date" 
                   value={teacherDate} 
@@ -191,8 +190,8 @@ function App() {
                 />
               </div>
 
-              <div style={{ marginBottom: '45px', width: '100%', textAlign: 'center' }}>
-                <label style={{ display: 'block', color: '#555555', fontSize: '13px', fontWeight: 'bold', marginBottom: '12px' }}>CARD COUNT (개수 지정)</label>
+              <div style={{ marginBottom: '32px', width: '100%', maxWidth: '340px', textAlign: 'center' }}>
+                <label style={{ display: 'block', color: '#555555', fontSize: '12px', fontWeight: 'bold', marginBottom: '8px' }}>CARD COUNT (개수 지정)</label>
                 <input 
                   type="number" 
                   value={cardCount} 
@@ -201,11 +200,11 @@ function App() {
                   onChange={(e) => setCardCount(e.target.value)} 
                   style={{ width: '100%', background: '#ffffff', color: '#2b2b2b', border: '2px solid #e6dec9', padding: '12px', borderRadius: '12px', fontSize: '16px', outline: 'none', textAlign: 'center', boxSizing: 'border-box' }}
                 />
-                <p style={{ color: '#555555', fontSize: '12px', marginTop: '10px', margin: '10px 0 0 0' }}>오늘 배울 단어들의 총 수량을 정합니다.</p>
+                <p style={{ color: '#555555', fontSize: '12px', marginTop: '8px', margin: '8px 0 0 0' }}>오늘 배울 단어들의 총 수량을 정합니다.</p>
               </div>
 
-              <div style={{ width: '100%' }}>
-                <button onClick={proceedToStep2} className="mini-start-btn">
+              <div style={{ width: '100%', maxWidth: '340px' }}>
+                <button onClick={proceedToStep2} className="mini-start-btn" style={{ padding: '14px 0', borderRadius: '12px', fontSize: '15px' }}>
                   다음 단계로 이동 ➡️
                 </button>
               </div>
@@ -248,7 +247,7 @@ function App() {
               </div>
 
               <div style={{ display: 'flex', gap: '10px', justifyContent: 'center' }}>
-                <div style={{ display: 'flex', gap: '10px', width: '100%' }}>
+                <div style={{ display: 'flex', gap: '10px', width: '100%', maxWidth: '340px' }}>
                   <button onClick={() => setTeacherStep(1)} style={{ background: '#ebe6dc', color: '#2b2b2b', border: '1px solid #d4ccb6', padding: '14px', borderRadius: '12px', cursor: 'pointer', fontWeight: 'bold' }}>
                     이전으로
                   </button>
@@ -274,7 +273,7 @@ function App() {
                 {dateList.map((item) => (
                   <div key={item.date} className="date-card">
                     <div className="date-label">{item.date}</div>
-                    <button onClick={() => startLearning(item.date)} className="mini-start-btn" style={{ padding: '8px 0', borderRadius: '6px' }}>
+                    <button onClick={() => startLearning(item.date)} className="mini-start-btn">
                       시작
                     </button>
                   </div>
@@ -287,30 +286,26 @@ function App() {
           ) : (
             /* 카드 맞추기 인게임 플레이 화면 */
             currentIndex < words.length ? (
-              /* 🛠️ 레이아웃 수축 제거 정렬 고정: 정렬 박스에 flex를 걸어 카드가 한가운데에 오게 지탱하면서 폭을 가득 넓힙니다 */
-              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', width: '100%' }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', color: '#555555', fontSize: '13px', marginBottom: '8px', width: '100%' }}>
+              <div>
+                <div style={{ display: 'flex', justifyContent: 'space-between', color: '#555555', fontSize: '13px', marginBottom: '8px' }}>
                   <span>진행</span>
                   <span style={{ color: '#a73838', fontWeight: 'bold' }}>{currentIndex + 1} / {words.length}</span>
                 </div>
                 
-                <div className="progress-bar-container" style={{ width: '100%' }}>
+                <div className="progress-bar-container">
                   <div className="progress-bar-fill" style={{ width: `${progressPercent}%` }}></div>
                 </div>
 
-                {/* 🔍 세로형 단어장 핏팅 클래스 추가: 동양적 서책 비주얼 복원 */}
-                <div className="card-container student-card-mode" onClick={() => setIsFlipped(!isFlipped)}>
+                <div className={`card-container ${isFlipped ? 'flipped' : ''}`} onClick={() => setIsFlipped(!isFlipped)}>
                   <div className="card-inner">
                     <div className="card-front">
                       <span style={{ fontSize: '12px', color: '#555555', letterSpacing: '2px', position: 'absolute', top: '20px' }}>JAPANESE</span>
-                      <div style={{ fontSize: '32px', fontWeight: 'bold', writingMode: 'vertical-rl', textOrientation: 'upright', letterSpacing: '4px' }}>
-                        {words[currentIndex].kanji}
-                      </div>
+                      <div style={{ fontSize: '32px', fontWeight: 'bold' }}>{words[currentIndex].kanji}</div>
                       <span style={{ fontSize: '11px', color: '#94a3b8', position: 'absolute', bottom: '20px' }}>TAP TO FLIP 🌸</span>
                     </div>
                     <div className="card-back">
                       <span style={{ fontSize: '12px', color: 'rgba(255,255,255,0.6)', letterSpacing: '2px', position: 'absolute', top: '20px' }}>MEANING</span>
-                      <div style={{ fontSize: '26px', fontWeight: 'bold', padding: '0 15px' }}>{words[currentIndex].meaning}</div>
+                      <div style={{ fontSize: '28px', fontWeight: 'bold' }}>{words[currentIndex].meaning}</div>
                       <span style={{ fontSize: '11px', color: 'rgba(255,255,255,0.4)', position: 'absolute', bottom: '20px' }}>TAP TO RETURN ↩️</span>
                     </div>
                   </div>
@@ -341,7 +336,7 @@ function App() {
               <div style={{ textAlign: 'center', padding: '40px 0' }}>
                 <div style={{ fontSize: '50px', marginBottom: '15px' }}>🌸</div>
                 <h3 style={{ fontSize: '22px', margin: '0 0 10px 0', color: '#a73838', letterSpacing: '-0.5px' }}>완료</h3>
-                <p style={{ color: '#555555', fontSize: '14px', margin: '0 0 25px 0' }}>오늘의 서책 단어들을 모두 완벽히 마스터했습니다.</p>
+                <p style={{ color: '#555555', fontSize: '14px', marginBottom: '25px' }}>오늘의 서책 단어들을 모두 완벽히 마스터했습니다.</p>
                 <button 
                   onClick={() => setHasStarted(false)} 
                   style={{ background: '#ebe6dc', color: '#2b2b2b', border: '1px solid #d4ccb6', padding: '12px 30px', borderRadius: '20px', cursor: 'pointer', fontWeight: 'bold' }}
