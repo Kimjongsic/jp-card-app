@@ -1,6 +1,6 @@
 :root {
-  background-color: #0d0e12;
-  color: #ffffff;
+  background-color: #f8fafc;
+  color: #1e293b;
   font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, Roboto, sans-serif;
 }
 
@@ -10,33 +10,34 @@ body {
   justify-content: center;
   align-items: center;
   min-height: 100vh;
-  background: radial-gradient(circle at top right, #1e1b4b, #0d0e12);
+  background: radial-gradient(circle at top right, #f1f5f9, #e2e8f0);
 }
 
-/* 힙한 대시보드 메인 박스 */
+/* 정갈하고 모던한 대시보드 메인 박스 */
 .dashboard-box {
-  background: rgba(255, 255, 255, 0.03);
+  background: #ffffff;
   border-radius: 24px;
   padding: 30px;
-  border: 1px solid rgba(255, 255, 255, 0.05);
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.04), 0 1px 8px rgba(0, 0, 0, 0.02);
 }
 
 /* 첫 화면 역할 선택 카드 */
 .role-select-card {
-  background: linear-gradient(135deg, #1e1e2f, #14151f);
-  border: 1px solid rgba(255, 255, 255, 0.05);
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
   border-radius: 20px;
   padding: 30px;
   text-align: center;
   cursor: pointer;
   transition: all 0.3s ease;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.03);
 }
 
 .role-select-card:hover {
-  transform: translateY(-5px);
-  border-color: #00ffcc;
-  box-shadow: 0 10px 25px rgba(0, 255, 204, 0.15);
+  transform: translateY(-4px);
+  border-color: #005CC5;
+  box-shadow: 0 12px 20px rgba(0, 92, 197, 0.1);
 }
 
 /* 학생용 날짜 카드 그리드 */
@@ -48,30 +49,31 @@ body {
 }
 
 .date-card {
-  background: linear-gradient(135deg, #14151f, #1e1b4b);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
   padding: 20px;
   border-radius: 16px;
   text-align: center;
   transition: all 0.2s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.01);
 }
 
 .date-card:hover {
-  transform: translateY(-5px);
-  border-color: #00ffcc;
-  box-shadow: 0 5px 15px rgba(0, 255, 204, 0.2);
+  transform: translateY(-3px);
+  border-color: #005CC5;
+  box-shadow: 0 6px 12px rgba(0, 92, 197, 0.08);
 }
 
 .date-label {
   font-size: 14px;
-  color: #9ca3af;
+  color: #475569;
   margin-bottom: 12px;
-  font-weight: 500;
+  font-weight: 600;
 }
 
 .mini-start-btn {
-  background: #00ffcc;
-  color: #000;
+  background: #005CC5;
+  color: #ffffff;
   border: none;
   padding: 8px 0;
   border-radius: 8px;
@@ -82,10 +84,10 @@ body {
 }
 
 .mini-start-btn:hover {
-  background: #00e6b8;
+  background: #004bb0;
 }
 
-/* 카드 뒤집기 3D 스타일 */
+/* 카드 뒤집기 3D 스타일 (모던 인디고 & 화이트 감성) */
 .card-container {
   perspective: 1000px;
   width: 340px;
@@ -118,26 +120,25 @@ body {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+  border: 1px solid #e2e8f0;
 }
 
 .card-front {
-  background: linear-gradient(135deg, #1e1e2f, #2a2a40);
-  color: #00ffcc;
-  text-shadow: 0 0 10px rgba(0, 255, 204, 0.5);
+  background: #ffffff;
+  color: #005CC5;
 }
 
 .card-back {
-  background: linear-gradient(135deg, #7c3aed, #4c1d95);
+  background: linear-gradient(135deg, #005CC5, #003F8A);
   color: #ffffff;
-  transform: rotateY(180deg);
+  border-color: #004bb0;
 }
 
 /* 애니메이션 진행 바 */
 .progress-bar-container {
   width: 100%;
-  background-color: #1e1e2f;
+  background-color: #f1f5f9;
   border-radius: 10px;
   height: 8px;
   overflow: hidden;
@@ -145,7 +146,7 @@ body {
 }
 
 .progress-bar-fill {
-  background: linear-gradient(90deg, #00ffcc, #7c3aed);
+  background: linear-gradient(90deg, #3b82f6, #005CC5);
   height: 100%;
   transition: width 0.3s ease;
 }
@@ -163,12 +164,14 @@ body {
   border-radius: 20px;
   font-size: 12px;
   font-weight: bold;
-  background: rgba(255, 255, 255, 0.05);
-  color: #6b7280;
+  background: #f1f5f9;
+  color: #64748b;
+  border: 1px solid #e2e8f0;
 }
 
 .step-dot.active {
-  background: #7c3aed;
+  background: #005CC5;
   color: #fff;
-  box-shadow: 0 0 10px rgba(124, 58, 237, 0.4);
+  border-color: #005CC5;
+  box-shadow: 0 0 10px rgba(0, 92, 197, 0.15);
 }
