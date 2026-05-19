@@ -22,6 +22,23 @@ body {
   box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
 }
 
+/* 첫 화면 역할 선택 카드 */
+.role-select-card {
+  background: linear-gradient(135deg, #1e1e2f, #14151f);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 20px;
+  padding: 30px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.role-select-card:hover {
+  transform: translateY(-5px);
+  border-color: #00ffcc;
+  box-shadow: 0 10px 25px rgba(0, 255, 204, 0.15);
+}
+
 /* 학생용 날짜 카드 그리드 */
 .date-grid {
   display: grid;
@@ -131,4 +148,27 @@ body {
   background: linear-gradient(90deg, #00ffcc, #7c3aed);
   height: 100%;
   transition: width 0.3s ease;
+}
+
+/* 스텝 표시기 (선생님 모드용) */
+.step-indicator {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: 25px;
+}
+
+.step-dot {
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: bold;
+  background: rgba(255, 255, 255, 0.05);
+  color: #6b7280;
+}
+
+.step-dot.active {
+  background: #7c3aed;
+  color: #fff;
+  box-shadow: 0 0 10px rgba(124, 58, 237, 0.4);
 }
