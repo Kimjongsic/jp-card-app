@@ -3,12 +3,12 @@ import { supabase } from './supabaseClient';
 import './index.css';
 
 function App() {
-  // 라우팅 스테이트
+  // 메인 모드 상태 관리
   const [currentMode, setCurrentMode] = useState('landing'); 
   const [showPasswordModal, setShowPasswordModal] = useState(false);
   const [passwordInput, setPasswordInput] = useState('');
   
-  // 교사용 스테이트
+  // 선생님 모드 상태 관리
   const [teacherMenu, setTeacherMenu] = useState('menu'); 
   const [teacherStep, setTeacherStep] = useState(1);
   const [cardCount, setCardCount] = useState(15);
@@ -17,7 +17,7 @@ function App() {
   const [previewWords, setPreviewWords] = useState([]); 
   const [previewDate, setPreviewDate] = useState(''); 
 
-  // 학생용 스테이트
+  // 학생 모드 상태 관리
   const [dateList, setDateList] = useState([]); 
   const [words, setWords] = useState([]);
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -117,9 +117,9 @@ function App() {
   return (
     <div style={{ width: '100%', maxWidth: '540px', margin: '0 auto', paddingBottom: '30px' }}>
       
-      {/* 글로벌 탑 홈 네비게이션 버튼 (대문 화면 아닐 때만 미니멀 텍스트 조합으로 오픈) */}
-      {currentMode !== 'landing' && !showPasswordModal && (
-        <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: '15px' }}>
+      {/* 🔓 글로벌 탑 네비게이션: 선생님/학생 모드의 서브창이 아닐 때(로비 단계)만 원본 홈 버튼 활성화 */}
+      {currentMode !== 'landing' && teacherMenu === 'menu' && !hasStarted && !showPasswordModal && (
+        <div style={{ display: 'flex', justifyContent: 'flex-start', marginBottom: '15px' }}>
           <button onClick={resetToHome} className="text-back-btn">처음 화면으로</button>
         </div>
       )}
@@ -144,7 +144,7 @@ function App() {
         </div>
       )}
 
-      {/* 🛠️ 1번 개선: 가독성 좋고 동일 가치로 보완된 균형 잡힌 보안 확인 창 버튼 */}
+      {/* 보안 확인용 비밀번호 인증창 */}
       {showPasswordModal && (
         <div className="dashboard-box" style={{ textAlign: 'center', marginTop: '30px' }}>
           <h3 style={{ margin: '0 0 8px 0', fontSize: '18px', fontWeight: '800' }}>선생님 보안 코드</h3>
@@ -155,10 +155,9 @@ function App() {
             onChange={(e) => setPasswordInput(e.target.value)}
             placeholder="비밀번호"
             onKeyDown={(e) => e.key === 'Enter' && verifyPassword()}
-            style={{ background: 'rgba(255,255,255,0.04)', border: 'none', color: '#fff', padding: '16px', borderRadius: '14px', width: '90%', textAlign: 'center', outline: 'none', marginBottom: '24px', fontSize: '16px', boxSizing: 'box-shadow' }}
+            style={{ background: 'rgba(255,255,255,0.04)', border: 'none', color: '#fff', padding: '16px', borderRadius: '14px', width: '90%', textAlign: 'center', outline: 'none', marginBottom: '24px', fontSize: '16px' }}
           />
           <div style={{ display: 'flex', gap: '12px', width: '90%', margin: '0 auto' }}>
-            {/* 시각적 밸런스가 균등하도록 각각 50% 유동 너비를 배정하고 액션 연출을 최적화 */}
             <button onClick={verifyPassword} className="mini-start-btn" style={{ flex: 1, padding: '15px 0' }}>확인</button>
             <button onClick={() => setShowPasswordModal(false)} style={{ flex: 1, background: 'rgba(255,255,255,0.06)', color: '#fff', border: 'none', borderRadius: '14px', cursor: 'pointer', fontSize: '15px', fontWeight: 'bold' }}>취소</button>
           </div>
@@ -169,7 +168,7 @@ function App() {
       {currentMode === 'teacher' && !showPasswordModal && (
         <div className="dashboard-box">
           
-          {/* 🛠️ 2번 개선: 이모지 무더기를 모두 청소하여 심플하고 세련되게 마감한 인덱스 */}
+          {/* 선생님 메인 로비 메뉴 */}
           {teacherMenu === 'menu' && (
             <div>
               <h2 style={{ fontSize: '20px', margin: '0 0 24px 0', fontWeight: '800', textAlign: 'center' }}>선생님 관리 메뉴</h2>
@@ -186,12 +185,14 @@ function App() {
             </div>
           )}
 
-          {/* 카드 세트 만들기 서브 레이어 */}
+          {/* 🔓 [버튼 배치 개선 반영] 서브 작업 창 화면 제어부 */}
           {teacherMenu === 'create' && (
             <div>
               <div className="header-row">
-                <span style={{ fontSize: '17px', fontWeight: 'bold', color: '#7c3aed' }}>카드 세트 만들기</span>
-                <button onClick={() => setTeacherMenu('menu')} className="text-back-btn">돌아가기</button>
+                {/* 처음 화면으로(홈) 버튼을 왼쪽 배치, 돌아가기 버튼을 원래 홈 버튼 자리(오른쪽)에 배치 */}
+                <button onClick={resetToHome} className="text-back-btn" style={{ paddingLeft: 0 }}>처음 화면으로</button>
+                <span style={{ fontSize: '16px', fontWeight: 'bold', color: '#7c3aed' }}>카드 세트 만들기</span>
+                <button onClick={() => setTeacherMenu('menu')} className="text-back-btn" style={{ paddingRight: 0 }}>돌아가기</button>
               </div>
 
               {teacherStep === 1 ? (
@@ -207,7 +208,6 @@ function App() {
                   <button onClick={proceedToStep2} className="mini-start-btn" style={{ width: '100%', background: '#7c3aed', color: '#fff', padding: '16px 0', borderRadius: '16px' }}>입력 양식 생성하기</button>
                 </div>
               ) : (
-                /* 🛠️ 4번 개선: 미디어 가로 찢어짐을 원천 제거하기 위한 유동형 로우 인풋 팩 개편 */
                 <div>
                   <h4 style={{ margin: '0 0 15px 0', textAlign: 'center', fontSize: '14px', color: '#a0aec0' }}>{teacherDate} / 총 {cardCount}개 작성 목록</h4>
                   <div style={{ maxHeight: '320px', overflowY: 'auto', marginBottom: '25px', paddingRight: '4px' }}>
@@ -220,7 +220,7 @@ function App() {
                     ))}
                   </div>
                   <div style={{ display: 'flex', gap: '12px' }}>
-                    <button onClick={() => setTeacherStep(1)} style={{ background: 'rgba(255,255,255,0.05)', color: '#fff', border: 'none', padding: '14px 24px', borderRadius: '14px', cursor: 'pointer', fontSize: '15px' }}>이전</button>
+                    <button onClick={() => setTeacherStep(1)} style={{ background: 'rgba(255,255,255,0.05)', color: '#fff', border: 'none', padding: '14px 24px', borderRadius: '14px', cursor: 'pointer', fontSize: '15px' }}>이전 단계</button>
                     <button onClick={handleSaveDeck} style={{ flex: 1, background: '#7c3aed', color: '#fff', border: 'none', borderRadius: '14px', fontWeight: 'bold', cursor: 'pointer', fontSize: '16px' }}>서버 업로드 및 완료</button>
                   </div>
                 </div>
@@ -228,16 +228,17 @@ function App() {
             </div>
           )}
 
-          {/* 등록된 카드 세트 목록 패널 */}
+          {/* 🔓 [버튼 배치 개선 반영] 등록된 카드 세트 확인 목록 제어부 */}
           {teacherMenu === 'view' && (
             <div>
               <div className="header-row">
+                {/* 동일한 정렬 철학을 적용하여 처음화면버튼(왼쪽) / 돌아가기버튼(오른쪽) 매칭 배치 */}
+                <button onClick={resetToHome} className="text-back-btn" style={{ paddingLeft: 0 }}>처음 화면으로</button>
                 <span style={{ fontSize: '17px', fontWeight: 'bold', color: '#00ffcc' }}>등록된 카드 세트 목록</span>
-                <button onClick={() => { previewWords.length > 0 ? setPreviewWords([]) : setTeacherMenu('menu'); }} className="text-back-btn">돌아가기</button>
+                <button onClick={() => { previewWords.length > 0 ? setPreviewWords([]) : setTeacherMenu('menu'); }} className="text-back-btn" style={{ paddingRight: 0 }}>돌아가기</button>
               </div>
 
               {previewWords.length === 0 ? (
-                /* 🛠️ 3번 개선: 세로 대형 리스트 카드 간의 좌우 밸런스 및 gap 요소 튜닝 적용 */
                 <div className="date-list-vertical">
                   {dateList.map((item) => (
                     <div key={item.date} className="date-card-large">
@@ -278,7 +279,7 @@ function App() {
         </div>
       )}
 
-      {/* ==================== 2. 🎒 학생용 학습 구동 유닛 ==================== */}
+      {/* ==================== 2. 🎒 학생용 학습 구동 컴포넌트 ==================== */}
       {currentMode === 'student' && !showPasswordModal && (
         <div className="dashboard-box">
           
@@ -288,6 +289,8 @@ function App() {
                 <h2 style={{ fontSize: '21px', margin: 0, fontWeight: '800', letterSpacing: '-0.3px' }}>
                   오늘의 플래시 단어 카드
                 </h2>
+                {/* 서브 플레이에 진입하지 않은 날짜 목록 로비 상태일 때만 개별 원형 백 버튼 제공 */}
+                <button onClick={resetToHome} className="home-icon-btn" style={{ background: 'rgba(255,255,255,0.05)', width: '38px', height: '38px', borderRadius: '50%', border: 'none', color: '#fff', cursor: 'pointer' }}>🏠</button>
               </div>
               <p style={{ color: '#6b7280', fontSize: '14px', margin: '0 0 20px 0' }}>학습할 날짜의 카드를 터치해 시작해 주세요.</p>
               
@@ -317,13 +320,13 @@ function App() {
                   <div className="progress-bar-fill" style={{ width: `${progressPercent}%` }}></div>
                 </div>
 
-                {/* 🛠️ 5번 개선: 화면을 꽉 채우며 가독성을 최고치로 높인 와이드 매칭 카드 */}
+                {/* 🔓 CSS 인덱스 매칭 구조와 연계하여 화면 비율을 극대화한 가변 암기 패널 */}
                 <div className={`card-container ${isFlipped ? 'flipped' : ''}`} onClick={() => setIsFlipped(!isFlipped)}>
                   <div className="card-inner">
                     
                     <div className="card-front">
                       <span style={{ fontSize: '13px', color: '#6b7280', letterSpacing: '1.5px', position: 'absolute', top: '24px', fontWeight: 'bold' }}>일본어 문제</span>
-                      <div style={{ fontSize: 'clamp(34px, 7.5vw, 52px)', fontWeight: '900', color: '#00ffcc', textAlign: 'center', width: '100%', wordBreak: 'break-all' }}>
+                      <div style={{ fontSize: 'clamp(36px, 8.5vw, 56px)', fontWeight: '900', color: '#00ffcc', textAlign: 'center', width: '100%', wordBreak: 'break-all' }}>
                         {words[currentIndex].kanji}
                       </div>
                       <span style={{ fontSize: '13px', color: '#4b5563', position: 'absolute', bottom: '24px' }}>카드를 터치하면 정답이 보입니다</span>
@@ -331,7 +334,7 @@ function App() {
 
                     <div className="card-back">
                       <span style={{ fontSize: '13px', color: 'rgba(255,255,255,0.5)', letterSpacing: '1.5px', position: 'absolute', top: '24px', fontWeight: 'bold' }}>한국어 해석</span>
-                      <div style={{ fontSize: 'clamp(28px, 6.5vw, 42px)', fontWeight: '800', color: '#ffffff', textAlign: 'center', width: '100%', wordBreak: 'break-all' }}>
+                      <div style={{ fontSize: 'clamp(30px, 7.5vw, 46px)', fontWeight: '800', color: '#ffffff', textAlign: 'center', width: '100%', wordBreak: 'break-all' }}>
                         {words[currentIndex].meaning}
                       </div>
                       <span style={{ fontSize: '12px', color: 'rgba(255,255,255,0.3)', position: 'absolute', bottom: '24px' }}>다시 터치하면 원래대로 돌아갑니다</span>

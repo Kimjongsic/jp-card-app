@@ -11,7 +11,7 @@ body {
   align-items: flex-start;
   min-height: 100vh;
   background: radial-gradient(circle at 50% 0%, #151233, #0b0c10);
-  padding: 24px 12px; /* 모바일 좌우 여백 확보 */
+  padding: 24px 12px;
   box-sizing: border-box;
 }
 
@@ -40,7 +40,7 @@ body {
   background: rgba(255,255,255,0.04);
 }
 
-/* 일자별 세로 카드 뷰 (확장 및 여백 개선) */
+/* 일자별 세로 카드 리스트 */
 .date-list-vertical {
   display: flex;
   flex-direction: column;
@@ -49,7 +49,6 @@ body {
   width: 100%;
 }
 
-/* 🔓 3번 개선: 날짜와 조회 버튼 사이 거리를 벌려주기 위한 padding 및 gap 확보 */
 .date-card-large {
   background: linear-gradient(90deg, rgba(255,255,255,0.04), rgba(255,255,255,0.01));
   padding: 32px 24px;
@@ -59,7 +58,7 @@ body {
   align-items: center;
   box-sizing: border-box;
   width: 100%;
-  gap: 20px; /* 요소 간 최소 간격 보장 */
+  gap: 20px;
   box-shadow: 0 12px 24px rgba(0,0,0,0.25);
 }
 
@@ -79,17 +78,16 @@ body {
   font-weight: 800;
   cursor: pointer;
   font-size: 15px;
-  white-space: nowrap; /* 텍스트 찌그러짐 방지 */
+  white-space: nowrap;
   box-shadow: 0 4px 14px rgba(0, 255, 204, 0.35);
-  transition: background 0.2s;
 }
 
-/* 📱 5번 개선: 모바일 환경에서 좌우를 꽉 채우는 박진감 넘치는 플래시 카드 */
+/* 🔓 학생 모드 문제 카드를 화면에 가득 채우도록 크기 대폭 키움 */
 .card-container {
   perspective: 1200px;
-  width: 100%; /* 너비를 꽉 채움 */
-  height: clamp(280px, 52vh, 360px); /* 카드 세로 높이 확대 */
-  margin: 30px auto;
+  width: 100%; 
+  height: clamp(340px, 60vh, 460px); /* 화면을 꽉 채울 수 있도록 세로 비율 확대 */
+  margin: 25px auto;
   cursor: pointer;
 }
 
@@ -120,7 +118,7 @@ body {
   box-shadow: 0 25px 50px rgba(0, 0, 0, 0.45);
   transform: translateZ(0); 
   will-change: transform;
-  padding: 20px; /* 내부 가변 가독성 */
+  padding: 24px;
   box-sizing: border-box;
 }
 
@@ -146,7 +144,7 @@ body {
   box-shadow: 0 4px 15px rgba(0,0,0,0.2);
 }
 
-/* 📱 4번 개선: 모바일 가로 찢어짐 원천 차단 컴포넌트 */
+/* 입력 양식 컨테이너 */
 .input-row-container {
   display: flex;
   gap: 8px;
@@ -158,7 +156,7 @@ body {
 
 .input-dark {
   flex: 1;
-  min-width: 0; /* flex 자식 요소 터짐 방지 핵심 속성 */
+  min-width: 0;
   background: rgba(255,255,255,0.04);
   border: none;
   color: #fff;
@@ -208,7 +206,6 @@ body {
   margin-bottom: 25px;
 }
 
-/* 텍스트 스타일 텍스트 버튼 (화려한 이모지 대체) */
 .text-back-btn {
   background: transparent;
   border: none;
@@ -217,6 +214,7 @@ body {
   font-size: 15px;
   font-weight: 600;
   padding: 8px 12px;
+  transition: color 0.2s;
 }
 .text-back-btn:hover {
   color: #ffffff;
