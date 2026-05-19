@@ -1,15 +1,6 @@
 :root {
-  /* 일본 전통 색상 모티브의 밝고 따뜻한 컬러 팔레트 */
-  --bg-color: #F5F3ED; 
-  --panel-bg: #FFFFFF;
-  --text-main: #2C363F; 
-  --text-sub: #7A8288;
-  --accent-red: #C84B31; 
-  --accent-blue: #2A475E; 
-  --border-color: #E8E5DF;
-  
-  background-color: var(--bg-color);
-  color: var(--text-main);
+  background-color: #0d0e12;
+  color: #ffffff;
   font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, Roboto, sans-serif;
 }
 
@@ -17,123 +8,89 @@ body {
   margin: 0;
   display: flex;
   justify-content: center;
-  align-items: center; /* PC에서는 화면 중앙 정렬이 안정감 있음 */
+  align-items: center;
   min-height: 100vh;
-  background: var(--bg-color);
-  padding: 40px 20px;
-  box-sizing: border-box;
+  background: radial-gradient(circle at top right, #1e1b4b, #0d0e12);
 }
 
-/* 💻 PC 환경에 맞게 넓어진 메인 대시보드 박스 */
+/* 힙한 대시보드 메인 박스 */
 .dashboard-box {
-  background: var(--panel-bg);
+  background: rgba(255, 255, 255, 0.03);
   border-radius: 24px;
-  padding: 50px 60px; /* 내부 여백 대폭 확대 */
-  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.06);
-  width: 100%;
-  max-width: 1100px; /* PC 와이드 화면 활용 */
-  min-height: 650px;
-  display: flex;
-  flex-direction: column;
-  box-sizing: border-box;
-  border: 1px solid #FFFFFF;
+  padding: 30px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
 }
 
-.content-wrapper {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-}
-.content-wrapper-top {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-}
-
-/* 💻 PC용 그리드 레이아웃 (카드들을 양옆으로 나란히 배치) */
-.grid-2col {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 30px;
-  width: 100%;
-}
-
+/* 첫 화면 역할 선택 카드 */
 .role-select-card {
-  background: #FCFBFA;
-  border: 1px solid var(--border-color);
+  background: linear-gradient(135deg, #1e1e2f, #14151f);
+  border: 1px solid rgba(255, 255, 255, 0.05);
   border-radius: 20px;
-  padding: 50px 30px;
+  padding: 30px;
   text-align: center;
   cursor: pointer;
-  transition: all 0.2s ease;
-  height: 100%;
-  box-sizing: border-box;
+  transition: all 0.3s ease;
 }
+
 .role-select-card:hover {
-  background: #FFFFFF;
-  border-color: var(--accent-red);
-  box-shadow: 0 8px 24px rgba(200, 75, 49, 0.08);
-  transform: translateY(-6px);
+  transform: translateY(-5px);
+  border-color: #00ffcc;
+  box-shadow: 0 10px 25px rgba(0, 255, 204, 0.15);
 }
 
-/* 💻 날짜 목록 역시 한 줄에 3~4개씩 바둑판 배열 */
-.date-list-grid {
+/* 학생용 날짜 카드 그리드 */
+.date-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  gap: 20px;
-  margin-top: 30px;
-  width: 100%;
+  grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+  gap: 15px;
+  margin-top: 20px;
 }
 
-.date-card-large {
-  background: #FFFFFF;
-  border: 1px solid var(--border-color);
-  padding: 28px 32px;
-  border-radius: 20px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  box-sizing: border-box;
-  width: 100%;
+.date-card {
+  background: linear-gradient(135deg, #14151f, #1e1b4b);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  padding: 20px;
+  border-radius: 16px;
+  text-align: center;
   transition: all 0.2s ease;
 }
-.date-card-large:hover {
-  border-color: var(--accent-blue);
-  box-shadow: 0 8px 20px rgba(42, 71, 94, 0.08);
-  transform: translateY(-4px);
+
+.date-card:hover {
+  transform: translateY(-5px);
+  border-color: #00ffcc;
+  box-shadow: 0 5px 15px rgba(0, 255, 204, 0.2);
 }
 
 .date-label {
-  font-size: 20px;
-  color: var(--text-main);
-  font-weight: 700;
-  letter-spacing: 0.5px;
+  font-size: 14px;
+  color: #9ca3af;
+  margin-bottom: 12px;
+  font-weight: 500;
 }
 
 .mini-start-btn {
-  background: var(--text-main);
-  color: #FFFFFF;
+  background: #00ffcc;
+  color: #000;
   border: none;
-  padding: 14px 32px;
-  border-radius: 12px;
-  font-weight: 700;
+  padding: 8px 0;
+  border-radius: 8px;
+  font-weight: bold;
   cursor: pointer;
-  font-size: 16px;
+  width: 100%;
   transition: background 0.2s;
 }
+
 .mini-start-btn:hover {
-  background: var(--accent-red);
+  background: #00e6b8;
 }
 
-/* 💻 와이드 화면에 맞춰 거대해진 3D 플래시 카드 */
+/* 카드 뒤집기 3D 스타일 */
 .card-container {
-  perspective: 1500px;
-  width: 100%; 
-  max-width: 850px; /* PC 화면에서 압도적인 가독성 제공 */
-  height: 420px; 
-  margin: 40px auto;
+  perspective: 1000px;
+  width: 340px;
+  height: 220px;
+  margin: 30px auto;
   cursor: pointer;
 }
 
@@ -142,7 +99,7 @@ body {
   width: 100%;
   height: 100%;
   text-align: center;
-  transition: transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+  transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
   transform-style: preserve-3d;
 }
 
@@ -154,148 +111,64 @@ body {
   position: absolute;
   width: 100%;
   height: 100%;
-  backface-visibility: hidden;
   -webkit-backface-visibility: hidden;
-  border-radius: 32px;
+  backface-visibility: hidden;
+  border-radius: 20px;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.08);
-  transform: translateZ(0); 
-  will-change: transform;
-  padding: 40px;
-  box-sizing: border-box;
-  overflow: hidden;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .card-front {
-  background: #FFFFFF;
-  border: 1px solid var(--border-color);
-  color: var(--text-main);
+  background: linear-gradient(135deg, #1e1e2f, #2a2a40);
+  color: #00ffcc;
+  text-shadow: 0 0 10px rgba(0, 255, 204, 0.5);
 }
 
 .card-back {
-  background: #FFF9F8;
-  border: 1px solid #F5E6E6;
-  color: var(--accent-red);
-  transform: rotateY(180deg) translateZ(0);
+  background: linear-gradient(135deg, #7c3aed, #4c1d95);
+  color: #ffffff;
+  transform: rotateY(180deg);
 }
 
-/* 액션 버튼을 PC 크기에 맞게 조정 */
-.action-btn-main {
-  width: 100%;
-  max-width: 500px;
-  margin: 0 auto; /* 중앙 정렬 */
-  display: block;
-  border: none;
-  padding: 20px;
-  border-radius: 16px;
-  font-size: 18px;
-  font-weight: 700;
-  cursor: pointer;
-  transition: all 0.2s ease;
-}
-.action-btn-main:hover {
-  transform: scale(1.02);
-}
-
-/* 💻 단어 입력 창을 2열 그리드로 분할하여 빈 공간 활용 */
-.input-grid-2col {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 16px 24px;
-  max-height: 450px;
-  overflow-y: auto;
-  padding-right: 10px;
-  margin-bottom: 30px;
-}
-
-.input-row-container-compact {
-  display: flex;
-  gap: 12px;
-  align-items: center;
-  width: 100%;
-  box-sizing: border-box;
-}
-
-.input-light-compact {
-  flex: 1;
-  min-width: 0;
-  background: #F9F8F6;
-  border: 1px solid var(--border-color);
-  color: var(--text-main);
-  padding: 16px 18px;
-  border-radius: 12px;
-  font-size: 16px;
-  outline: none;
-  box-sizing: border-box;
-  transition: border 0.2s;
-}
-.input-light-compact:focus {
-  border-color: var(--accent-blue);
-  background: #FFFFFF;
-}
-
-.teacher-main-btn {
-  background: #FFFFFF;
-  border: 1px solid var(--border-color);
-  border-radius: 20px;
-  padding: 40px 30px;
-  color: var(--text-main);
-  font-size: 20px;
-  font-weight: 700;
-  cursor: pointer;
-  width: 100%;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  box-sizing: border-box;
-  box-shadow: 0 6px 16px rgba(0,0,0,0.02);
-  transition: all 0.2s;
-}
-.teacher-main-btn:hover {
-  border-color: var(--accent-blue);
-  transform: translateY(-4px);
-}
-
+/* 애니메이션 진행 바 */
 .progress-bar-container {
   width: 100%;
-  background-color: var(--border-color);
-  border-radius: 8px;
-  height: 10px;
+  background-color: #1e1e2f;
+  border-radius: 10px;
+  height: 8px;
   overflow: hidden;
-  margin-bottom: 24px;
+  margin-bottom: 20px;
 }
+
 .progress-bar-fill {
-  background: var(--accent-red);
+  background: linear-gradient(90deg, #00ffcc, #7c3aed);
   height: 100%;
   transition: width 0.3s ease;
 }
 
-.header-row {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  width: 100%;
-  margin-bottom: 40px;
-}
-
-.icon-btn {
-  background: #F5F3ED;
-  border: 1px solid var(--border-color);
-  color: var(--text-sub);
-  width: 48px;
-  height: 48px;
-  border-radius: 50%;
+/* 스텝 표시기 (선생님 모드용) */
+.step-indicator {
   display: flex;
   justify-content: center;
-  align-items: center;
-  cursor: pointer;
-  transition: all 0.2s;
-  padding: 0;
+  gap: 10px;
+  margin-bottom: 25px;
 }
-.icon-btn:hover {
-  background: #E8E5DF;
-  color: var(--text-main);
+
+.step-dot {
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: bold;
+  background: rgba(255, 255, 255, 0.05);
+  color: #6b7280;
+}
+
+.step-dot.active {
+  background: #7c3aed;
+  color: #fff;
+  box-shadow: 0 0 10px rgba(124, 58, 237, 0.4);
 }
