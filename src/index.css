@@ -26,7 +26,7 @@ body {
   box-shadow: 0 8px 24px rgba(43, 43, 43, 0.04);
 }
 
-/* 첫 화면 역할 선택 카드 (화이트 와시 감성) */
+/* 첫 화면 역할 선택 카드 */
 .role-select-card {
   background: #ffffff;
   border: 2px solid #e6dec9;
@@ -93,7 +93,7 @@ body {
   background: #8c2e2e;
 }
 
-/* 3D 카드 플립 스타일 (서책 및 전통 목판화 감성 보정) */
+/* 3D 카드 플립 스타일 */
 .card-container {
   perspective: 1000px;
   width: 340px;
@@ -162,14 +162,14 @@ body {
   transition: width 0.3s ease;
 }
 
-/* ⚙️ 설정 창 스텝 표시기 디자인 개선 (간격 확대 및 버튼 형태 제거) */
+/* 설정 창 스텝 표시기 레이아웃 */
 .step-indicator {
   display: flex;
   justify-content: center;
   align-items: center;
   gap: 12px;
-  margin-top: 25px;    /* 타이틀과의 간격을 넉넉히 확대 */
-  margin-bottom: 35px; /* 입력 폼과의 간격을 넉넉히 확대 */
+  margin-top: 25px;    
+  margin-bottom: 35px; 
 }
 
 .step-dot {
@@ -181,7 +181,6 @@ body {
   transition: all 0.2s ease;
 }
 
-/* 활성화 상태일 때 텍스트 색상을 강조하고 세련된 밑줄 추가 */
 .step-dot.active {
   color: #a73838;
   font-weight: 700;

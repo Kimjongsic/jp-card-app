@@ -164,12 +164,18 @@ function App() {
       {/* ==================== 1. 👨‍🏫 TEACHER(설정) MODE UI ==================== */}
       {currentMode === 'teacher' && !showPasswordModal && (
         <div className="dashboard-box">
-          <h2 style={{ textAlign: 'center', fontSize: '18px', margin: '0 0 5px 0', color: '#2b2b2b' }}>⚙️ 설정 : 카드 생성</h2>
+          {/* 🔍 줄맞춤 정렬 패치: flex 컨테이너 분할 및 기호 오프셋 보정 적용 */}
+          <h2 style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '5px', fontSize: '18px', margin: '0 0 5px 0', color: '#2b2b2b', fontWeight: '700' }}>
+            <span style={{ display: 'inline-flex', alignItems: 'center' }}>⚙️ 설정</span>
+            <span style={{ color: '#d4ccb6', display: 'inline-flex', alignItems: 'center', transform: 'translateY(-1px)', padding: '0 2px' }}>:</span>
+            <span style={{ display: 'inline-flex', alignItems: 'center' }}>카드 생성</span>
+          </h2>
           
-          {/* 스텝 비주얼 인디케이터 (구분선 화살표를 추가하여 프로세스 바 형태로 시각화) */}
+          {/* 스텝 비주얼 인디케이터 */}
           <div className="step-indicator">
             <div className={`step-dot ${teacherStep === 1 ? 'active' : ''}`}>1단계: 개수 설정</div>
-            <div style={{ color: '#d4ccb6', fontSize: '11px', userSelect: 'none' }}>▶</div>
+            {/* 🔍 줄맞춤 정렬 패치: 폰트 베이스라인 왜곡 억제 및 세밀한 Y축 정렬 적용 */}
+            <div style={{ color: '#d4ccb6', fontSize: '10px', userSelect: 'none', display: 'inline-flex', alignItems: 'center', transform: 'translateY(-0.5px)' }}>▶</div>
             <div className={`step-dot ${teacherStep === 2 ? 'active' : ''}`}>2단계: 단어 입력</div>
           </div>
 
@@ -263,7 +269,6 @@ function App() {
                 {dateList.map((item) => (
                   <div key={item.date} className="date-card">
                     <div className="date-label">{item.date}</div>
-                    {/* 開始 문구를 '시작'으로 한글 가독성 패치 반영 */}
                     <button onClick={() => startLearning(item.date)} className="mini-start-btn">
                       시작
                     </button>
@@ -323,7 +328,7 @@ function App() {
                 </button>
               </div>
             ) : (
-              /* 카드 클리어 오버레이 (DECK CLEARED!를 '완료'로 세련되게 번역 변경) */
+              /* 카드 클리어 오버레이 */
               <div style={{ textAlign: 'center', padding: '40px 0' }}>
                 <div style={{ fontSize: '50px', marginBottom: '15px' }}>🌸</div>
                 <h3 style={{ fontSize: '22px', margin: '0 0 10px 0', color: '#a73838', letterSpacing: '-0.5px' }}>완료</h3>
