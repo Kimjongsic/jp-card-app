@@ -8,7 +8,7 @@ function App() {
   const [showPasswordModal, setShowPasswordModal] = useState(false);
   const [passwordInput, setPasswordInput] = useState('');
   
-  // 교사 모드 전용 상태
+  // 교사(설정) 모드 전용 상태
   const [teacherStep, setTeacherStep] = useState(1); // 1단계 또는 2단계
   const [cardCount, setCardCount] = useState(15); // 기본값 15개
   const [teacherDate, setTeacherDate] = useState(new Date().toISOString().split('T')[0]);
@@ -161,19 +161,20 @@ function App() {
         </div>
       )}
 
-      {/* ==================== 1. 👨‍🏫 TEACHER MODE UI ==================== */}
+      {/* ==================== 1. 👨‍🏫 TEACHER(설정) MODE UI ==================== */}
       {currentMode === 'teacher' && !showPasswordModal && (
         <div className="dashboard-box">
           <h2 style={{ textAlign: 'center', fontSize: '18px', margin: '0 0 5px 0', color: '#2b2b2b' }}>⚙️ 설정 : 카드 생성</h2>
           
-          {/* 스텝 비주얼 인디케이터 */}
+          {/* 스텝 비주얼 인디케이터 (구분선 화살표를 추가하여 프로세스 바 형태로 시각화) */}
           <div className="step-indicator">
             <div className={`step-dot ${teacherStep === 1 ? 'active' : ''}`}>1단계: 개수 설정</div>
+            <div style={{ color: '#d4ccb6', fontSize: '11px', userSelect: 'none' }}>▶</div>
             <div className={`step-dot ${teacherStep === 2 ? 'active' : ''}`}>2단계: 단어 입력</div>
           </div>
 
           {teacherStep === 1 ? (
-            /* [선생님 - 1단계] 날짜 및 카드 개수 정의 */
+            /* [설정 - 1단계] 날짜 및 카드 개수 정의 */
             <div style={{ textAlign: 'center', padding: '10px 0' }}>
               <div style={{ marginBottom: '20px' }}>
                 <label style={{ display: 'block', color: '#555555', fontSize: '12px', fontWeight: 'bold', marginBottom: '8px' }}>TARGET DATE</label>
@@ -203,7 +204,7 @@ function App() {
               </button>
             </div>
           ) : (
-            /* [선생님 - 2단계] 유동성 단어 리스트 채우기 */
+            /* [설정 - 2단계] 유동성 단어 리스트 채우기 */
             <div>
               <p style={{ color: '#2b2b2b', fontSize: '13px', textAlign: 'center', marginBottom: '20px' }}>
                 {teacherDate} 세트에 들어갈 <b style={{ color: '#a73838' }}>{cardCount}개</b>의 단어 쌍을 입력하세요.
@@ -262,8 +263,9 @@ function App() {
                 {dateList.map((item) => (
                   <div key={item.date} className="date-card">
                     <div className="date-label">{item.date}</div>
+                    {/* 開始 문구를 '시작'으로 한글 가독성 패치 반영 */}
                     <button onClick={() => startLearning(item.date)} className="mini-start-btn">
-                      開始
+                      시작
                     </button>
                   </div>
                 ))}
@@ -321,10 +323,10 @@ function App() {
                 </button>
               </div>
             ) : (
-              /* 카드 클리어 오버레이 */
+              /* 카드 클리어 오버레이 (DECK CLEARED!를 '완료'로 세련되게 번역 변경) */
               <div style={{ textAlign: 'center', padding: '40px 0' }}>
                 <div style={{ fontSize: '50px', marginBottom: '15px' }}>🌸</div>
-                <h3 style={{ fontSize: '22px', margin: '0 0 10px 0', color: '#a73838' }}>DECK CLEARED!</h3>
+                <h3 style={{ fontSize: '22px', margin: '0 0 10px 0', color: '#a73838', letterSpacing: '-0.5px' }}>완료</h3>
                 <p style={{ color: '#555555', fontSize: '14px', marginBottom: '25px' }}>오늘의 서책 단어들을 모두 완벽히 마스터했습니다.</p>
                 <button 
                   onClick={() => setHasStarted(false)} 
