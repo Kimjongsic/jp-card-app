@@ -11,15 +11,15 @@ body {
   align-items: flex-start;
   min-height: 100vh;
   background: radial-gradient(circle at 50% 0%, #151233, #0b0c10);
-  padding: 24px 16px; /* 상하 여백을 늘려 더 안정감 있게 배치 */
+  padding: 24px 12px; /* 모바일 좌우 여백 확보 */
   box-sizing: border-box;
 }
 
-/* 🔓 최대 너비를 540px로 확장하고 내부 여백(Padding)을 넓혀 시원한 공간감 부여 */
+/* 글래스모피즘 메인 대시보드 */
 .dashboard-box {
   background: rgba(255, 255, 255, 0.02);
   border-radius: 32px;
-  padding: 36px 28px; /* 내부 여백을 크게 확대하여 답답함 해소 */
+  padding: 36px 24px;
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   box-shadow: 0 30px 60px -15px rgba(0, 0, 0, 0.6);
@@ -27,23 +27,20 @@ body {
   box-sizing: border-box;
 }
 
-/* 역할 선택 대형 카드 */
+/* 역할 선택 카드 */
 .role-select-card {
   background: linear-gradient(135deg, rgba(255,255,255,0.03), rgba(255,255,255,0.01));
   border-radius: 24px;
-  padding: 40px 28px;
+  padding: 40px 24px;
   text-align: center;
   cursor: pointer;
-  transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1), background 0.25s;
+  transition: transform 0.25s, background 0.25s;
 }
 .role-select-card:hover {
   background: rgba(255,255,255,0.04);
 }
-.role-select-card:active {
-  transform: scale(0.97);
-}
 
-/* 📱 더 크고 와이드해진 일자별 세로 카드 뷰 */
+/* 일자별 세로 카드 뷰 (확장 및 여백 개선) */
 .date-list-vertical {
   display: flex;
   flex-direction: column;
@@ -52,24 +49,22 @@ body {
   width: 100%;
 }
 
+/* 🔓 3번 개선: 날짜와 조회 버튼 사이 거리를 벌려주기 위한 padding 및 gap 확보 */
 .date-card-large {
   background: linear-gradient(90deg, rgba(255,255,255,0.04), rgba(255,255,255,0.01));
-  padding: 32px 28px; /* 카드 자체의 물리적 크기를 대폭 확장 */
+  padding: 32px 24px;
   border-radius: 24px;
   display: flex;
   justify-content: space-between;
   align-items: center;
   box-sizing: border-box;
   width: 100%;
+  gap: 20px; /* 요소 간 최소 간격 보장 */
   box-shadow: 0 12px 24px rgba(0,0,0,0.25);
-  transition: transform 0.2s;
-}
-.date-card-large:active {
-  transform: scale(0.99);
 }
 
 .date-label {
-  font-size: 20px; /* 날짜 타이틀 크기 확대 */
+  font-size: 20px;
   color: #ffffff;
   font-weight: 700;
   letter-spacing: 0.5px;
@@ -79,24 +74,22 @@ body {
   background: #00ffcc;
   color: #0b0c10;
   border: none;
-  padding: 14px 36px; /* 버튼 크기를 더 시원하게 확장 */
+  padding: 14px 28px;
   border-radius: 14px;
   font-weight: 800;
   cursor: pointer;
-  font-size: 16px;
+  font-size: 15px;
+  white-space: nowrap; /* 텍스트 찌그러짐 방지 */
   box-shadow: 0 4px 14px rgba(0, 255, 204, 0.35);
   transition: background 0.2s;
 }
-.mini-start-btn:hover {
-  background: #00e6b8;
-}
 
-/* 🔮 화면 비율에 맞춰 확장되는 시원한 3D 플립 카드 세트 */
+/* 📱 5번 개선: 모바일 환경에서 좌우를 꽉 채우는 박진감 넘치는 플래시 카드 */
 .card-container {
   perspective: 1200px;
-  width: 100%;
-  height: clamp(260px, 48vh, 340px); /* 세로 크기를 한층 더 키움 */
-  margin: 35px auto;
+  width: 100%; /* 너비를 꽉 채움 */
+  height: clamp(280px, 52vh, 360px); /* 카드 세로 높이 확대 */
+  margin: 30px auto;
   cursor: pointer;
 }
 
@@ -113,7 +106,6 @@ body {
   transform: rotateY(180deg);
 }
 
-/* 🔍 글자 해상도 최적화 및 큼직한 가독성 배치 */
 .card-front, .card-back {
   position: absolute;
   width: 100%;
@@ -127,8 +119,9 @@ body {
   align-items: center;
   box-shadow: 0 25px 50px rgba(0, 0, 0, 0.45);
   transform: translateZ(0); 
-  -webkit-transform: translateZ(0);
   will-change: transform;
+  padding: 20px; /* 내부 가변 가독성 */
+  box-sizing: border-box;
 }
 
 .card-front {
@@ -142,40 +135,46 @@ body {
   transform: rotateY(180deg) translateZ(0);
 }
 
-/* 메인 하단 제어 버튼 */
 .action-btn-main {
   width: 100%;
   border: none;
-  padding: 18px; /* 세로 두께를 키워 가독성과 터치 영역 확보 */
+  padding: 18px;
   border-radius: 18px;
   font-size: 17px;
   font-weight: 700;
   cursor: pointer;
   box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-  transition: all 0.2s;
 }
 
-/* 교사용 리스트 인풋 입력창 */
+/* 📱 4번 개선: 모바일 가로 찢어짐 원천 차단 컴포넌트 */
+.input-row-container {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 12px;
+  align-items: center;
+  width: 100%;
+  box-sizing: border-box;
+}
+
 .input-dark {
   flex: 1;
+  min-width: 0; /* flex 자식 요소 터짐 방지 핵심 속성 */
   background: rgba(255,255,255,0.04);
   border: none;
   color: #fff;
-  padding: 14px; /* 더 쾌적하게 입력할 수 있도록 확대 */
+  padding: 14px;
   border-radius: 12px;
-  font-size: 16px;
+  font-size: 15px;
   outline: none;
-}
-.input-dark:focus {
-  background: rgba(255,255,255,0.08);
+  box-sizing: border-box;
 }
 
-/* 선생님 대형 메뉴 버튼 스타일 */
+/* 선생님 대형 메뉴 버튼 */
 .teacher-main-btn {
   background: rgba(255,255,255,0.02);
   border: none;
   border-radius: 22px;
-  padding: 32px 24px; /* 메뉴 상자의 위아래 볼륨을 키워 시원하게 처리 */
+  padding: 32px 24px;
   color: white;
   font-size: 18px;
   font-weight: bold;
@@ -185,13 +184,8 @@ body {
   justify-content: space-between;
   align-items: center;
   box-sizing: border-box;
-  transition: background 0.2s;
-}
-.teacher-main-btn:hover {
-  background: rgba(255,255,255,0.04);
 }
 
-/* 진행 스케일 바 */
 .progress-bar-container {
   width: 100%;
   background-color: rgba(255,255,255,0.03);
@@ -211,24 +205,19 @@ body {
   justify-content: space-between;
   align-items: center;
   width: 100%;
-  margin-bottom: 25px; /* 타이틀 아래 공백 확보 */
+  margin-bottom: 25px;
 }
 
-/* 🔙 작고 답답했던 돌아가기 버튼을 원형 아이콘 버튼 스타일로 통일 및 확대 */
-.home-icon-btn {
-  background: rgba(255,255,255,0.05);
+/* 텍스트 스타일 텍스트 버튼 (화려한 이모지 대체) */
+.text-back-btn {
+  background: transparent;
   border: none;
-  color: white;
-  font-size: 18px;
-  width: 46px; /* 버튼 직경을 키워 가독성과 터치 최적화 */
-  height: 46px;
-  border-radius: 50%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  color: #6b7280;
   cursor: pointer;
-  transition: background 0.2s;
+  font-size: 15px;
+  font-weight: 600;
+  padding: 8px 12px;
 }
-.home-icon-btn:hover {
-  background: rgba(255,255,255,0.1);
+.text-back-btn:hover {
+  color: #ffffff;
 }

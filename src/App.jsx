@@ -3,12 +3,12 @@ import { supabase } from './supabaseClient';
 import './index.css';
 
 function App() {
-  // 시스템 관리 모드 상태
+  // 라우팅 스테이트
   const [currentMode, setCurrentMode] = useState('landing'); 
   const [showPasswordModal, setShowPasswordModal] = useState(false);
   const [passwordInput, setPasswordInput] = useState('');
   
-  // 선생님 모드 상태 구조
+  // 교사용 스테이트
   const [teacherMenu, setTeacherMenu] = useState('menu'); 
   const [teacherStep, setTeacherStep] = useState(1);
   const [cardCount, setCardCount] = useState(15);
@@ -17,14 +17,13 @@ function App() {
   const [previewWords, setPreviewWords] = useState([]); 
   const [previewDate, setPreviewDate] = useState(''); 
 
-  // 학생 모드 플레이 상태 구조
+  // 학생용 스테이트
   const [dateList, setDateList] = useState([]); 
   const [words, setWords] = useState([]);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isFlipped, setIsFlipped] = useState(false);
   const [hasStarted, setHasStarted] = useState(false);
 
-  // 🔒 인증용 교사 암호
   const TEACHER_PASSWORD = "1234";
 
   useEffect(() => {
@@ -50,13 +49,13 @@ function App() {
       setCurrentMode('teacher');
       setTeacherMenu('menu');
     } else {
-      alert("❌ 비밀번호가 일치하지 않습니다.");
+      alert("비밀번호가 일치하지 않습니다.");
     }
   };
 
   const proceedToStep2 = () => {
     if (cardCount < 1 || cardCount > 50) {
-      alert("카드 수량은 1개부터 50개까지만 지정할 수 있습니다.");
+      alert("카드 수량은 1개부터 50개까지만 지정 가능합니다.");
       return;
     }
     setInputWords(Array(Number(cardCount)).fill({ kanji: '', meaning: '' }));
@@ -66,12 +65,12 @@ function App() {
   const handleSaveDeck = async () => {
     const filtered = inputWords.filter(w => w.kanji.trim() && w.meaning.trim());
     if(filtered.length < cardCount) {
-      alert(`⚡ 설정하신 ${cardCount}개의 카드를 빈칸 없이 모두 입력해야 완성됩니다.`);
+      alert(`설정하신 ${cardCount}개의 카드를 빈칸 없이 모두 작성해야 저장됩니다.`);
       return;
     }
 
     const { error: setErr } = await supabase.from('word_sets').upsert({ id: teacherDate, date: teacherDate });
-    if (setErr) return alert("❌ 카드 세트 저장 실패");
+    if (setErr) return alert("카드 세트 보관에 실패했습니다.");
 
     await supabase.from('words').delete().eq('set_id', teacherDate);
 
@@ -79,7 +78,7 @@ function App() {
     const { error: wordErr } = await supabase.from('words').insert(wordsToInsert);
 
     if (!wordErr) {
-      alert("🔮 일본어 카드 세트가 저장되었습니다!");
+      alert("오늘의 단어 세트 저장이 완료되었습니다.");
       fetchDateList();
       setTeacherMenu('menu');
     }
@@ -103,7 +102,7 @@ function App() {
       setIsFlipped(false);
       setHasStarted(true);
     } else {
-      alert("🫙 해당 날짜에 데이터가 없습니다.");
+      alert("해당 날짜에 출제된 단어가 없습니다.");
     }
   };
 
@@ -116,145 +115,146 @@ function App() {
   };
 
   return (
-    <div style={{ width: '100%', maxWidth: '540px', margin: '0 auto', paddingBottom: '40px' }}>
+    <div style={{ width: '100%', maxWidth: '540px', margin: '0 auto', paddingBottom: '30px' }}>
       
-      {/* 글로벌 상단 홈 버튼 */}
+      {/* 글로벌 탑 홈 네비게이션 버튼 (대문 화면 아닐 때만 미니멀 텍스트 조합으로 오픈) */}
       {currentMode !== 'landing' && !showPasswordModal && (
-        <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: '20px' }}>
-          <button onClick={resetToHome} className="home-icon-btn">🏠</button>
+        <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: '15px' }}>
+          <button onClick={resetToHome} className="text-back-btn">처음 화면으로</button>
         </div>
       )}
 
-      {/* ==================== 0. 메인 인트로 게이트웨이 화면 ==================== */}
+      {/* ==================== 0. 역할 분기 메인 선택 스크린 ==================== */}
       {currentMode === 'landing' && !showPasswordModal && (
         <div style={{ paddingTop: '20px' }}>
-          <h1 style={{ textAlign: 'center', fontSize: '26px', marginBottom: '45px', fontWeight: '800', letterSpacing: '-0.5px' }}>
-            🔮 일본어 카드 매칭 시스템
+          <h1 style={{ textAlign: 'center', fontSize: '24px', marginBottom: '40px', fontWeight: '800', letterSpacing: '-0.5px' }}>
+            일본어 랜덤 카드 맞추기
           </h1>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
             <div className="role-select-card" onClick={() => setCurrentMode('student')}>
-              <div style={{ fontSize: '42px', marginBottom: '10px' }}>🎒</div>
-              <h2 style={{ fontSize: '20px', margin: '0 0 8px 0', color: '#00ffcc' }}>학생 모드로 시작하기</h2>
-              <p style={{ color: '#718096', fontSize: '14px', margin: 0, lineHeight: '1.5' }}>공유받은 날짜별 플래시 카드를 보며 무작위 학습 피드백을 시작합니다.</p>
+              <h2 style={{ fontSize: '19px', margin: '0 0 8px 0', color: '#00ffcc', fontWeight: '800' }}>학생 모드로 시작하기</h2>
+              <p style={{ color: '#718096', fontSize: '14px', margin: 0 }}>일자별 플래시 카드를 터치하여 무작위 학습을 시작합니다.</p>
             </div>
 
             <div className="role-select-card" onClick={handleTeacherAccess}>
-              <div style={{ fontSize: '42px', marginBottom: '10px' }}>⚙️</div>
-              <h2 style={{ fontSize: '20px', margin: '0 0 8px 0', color: '#7c3aed' }}>선생님 모드로 시작하기</h2>
-              <p style={{ color: '#718096', fontSize: '14px', margin: 0, lineHeight: '1.5' }}>학습 카드 개수를 가변 제어하고 카드 세트 설계 및 원본 내역을 관리합니다.</p>
+              <h2 style={{ fontSize: '19px', margin: '0 0 8px 0', color: '#7c3aed', fontWeight: '800' }}>선생님 모드로 시작하기</h2>
+              <p style={{ color: '#718096', fontSize: '14px', margin: 0 }}>학습할 카드 개수 지정 및 데이터 세트를 생성하고 확인합니다.</p>
             </div>
           </div>
         </div>
       )}
 
-      {/* 선생님 전용 인증 창 */}
+      {/* 🛠️ 1번 개선: 가독성 좋고 동일 가치로 보완된 균형 잡힌 보안 확인 창 버튼 */}
       {showPasswordModal && (
         <div className="dashboard-box" style={{ textAlign: 'center', marginTop: '30px' }}>
-          <h3 style={{ margin: '0 0 12px 0', fontSize: '18px' }}>🔒 선생님 보안 코드</h3>
-          <p style={{ color: '#9ca3af', fontSize: '14px', marginBottom: '24px' }}>보안 인가 승인을 위해 암호를 기입하십시오.</p>
+          <h3 style={{ margin: '0 0 8px 0', fontSize: '18px', fontWeight: '800' }}>선생님 보안 코드</h3>
+          <p style={{ color: '#9ca3af', fontSize: '14px', marginBottom: '24px' }}>인증을 위해 관리자 암호를 입력하십시오.</p>
           <input 
             type="password" 
             value={passwordInput}
             onChange={(e) => setPasswordInput(e.target.value)}
             placeholder="비밀번호"
             onKeyDown={(e) => e.key === 'Enter' && verifyPassword()}
-            style={{ background: 'rgba(255,255,255,0.04)', border: 'none', color: '#fff', padding: '16px', borderRadius: '14px', width: '85%', textAlign: 'center', outline: 'none', marginBottom: '24px', fontSize: '17px' }}
+            style={{ background: 'rgba(255,255,255,0.04)', border: 'none', color: '#fff', padding: '16px', borderRadius: '14px', width: '90%', textAlign: 'center', outline: 'none', marginBottom: '24px', fontSize: '16px', boxSizing: 'box-shadow' }}
           />
-          <div style={{ display: 'flex', gap: '12px', justifyContent: 'center' }}>
-            <button onClick={verifyPassword} className="mini-start-btn" style={{ width: '95px' }}>확인</button>
-            <button onClick={() => setShowPasswordModal(false)} style={{ background: 'rgba(255,255,255,0.05)', color: '#fff', border: 'none', padding: '12px 22px', borderRadius: '12px', cursor: 'pointer', fontSize: '15px' }}>취소</button>
+          <div style={{ display: 'flex', gap: '12px', width: '90%', margin: '0 auto' }}>
+            {/* 시각적 밸런스가 균등하도록 각각 50% 유동 너비를 배정하고 액션 연출을 최적화 */}
+            <button onClick={verifyPassword} className="mini-start-btn" style={{ flex: 1, padding: '15px 0' }}>확인</button>
+            <button onClick={() => setShowPasswordModal(false)} style={{ flex: 1, background: 'rgba(255,255,255,0.06)', color: '#fff', border: 'none', borderRadius: '14px', cursor: 'pointer', fontSize: '15px', fontWeight: 'bold' }}>취소</button>
           </div>
         </div>
       )}
 
-      {/* ==================== 1. 👨‍🏫 선생님 전용 관리 섹션 ==================== */}
+      {/* ==================== 1. 교사용 모드 패널 ==================== */}
       {currentMode === 'teacher' && !showPasswordModal && (
         <div className="dashboard-box">
           
-          {/* [메뉴 메인 대시보드 로비] */}
+          {/* 🛠️ 2번 개선: 이모지 무더기를 모두 청소하여 심플하고 세련되게 마감한 인덱스 */}
           {teacherMenu === 'menu' && (
             <div>
-              <h2 style={{ fontSize: '22px', margin: '0 0 24px 0', fontWeight: '800' }}>⚙️ 선생님 관리 메뉴</h2>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+              <h2 style={{ fontSize: '20px', margin: '0 0 24px 0', fontWeight: '800', textAlign: 'center' }}>선생님 관리 메뉴</h2>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
                 <button className="teacher-main-btn" onClick={() => { setTeacherMenu('create'); setTeacherStep(1); }}>
-                  <span>📝 카드 세트 만들기</span>
-                  <span style={{ color: '#7c3aed', fontSize: '20px' }}>➡️</span>
+                  <span>카드 세트 만들기</span>
+                  <span style={{ color: '#7c3aed', fontWeight: 'bold' }}>→</span>
                 </button>
                 <button className="teacher-main-btn" onClick={() => { setTeacherMenu('view'); setPreviewWords([]); }}>
-                  <span>📂 등록된 카드 세트 목록</span>
-                  <span style={{ color: '#00ffcc', fontSize: '20px' }}>➡️</span>
+                  <span>등록된 카드 세트 목록</span>
+                  <span style={{ color: '#00ffcc', fontWeight: 'bold' }}>→</span>
                 </button>
               </div>
             </div>
           )}
 
-          {/* [세부 기능 1: 카드 세트 빌더 만들기 창] */}
+          {/* 카드 세트 만들기 서브 레이어 */}
           {teacherMenu === 'create' && (
             <div>
               <div className="header-row">
-                <span style={{ fontSize: '18px', fontWeight: 'bold', color: '#7c3aed' }}>📝 카드 세트 만들기</span>
-                <button onClick={() => setTeacherMenu('menu')} className="home-icon-btn">🔙</button>
+                <span style={{ fontSize: '17px', fontWeight: 'bold', color: '#7c3aed' }}>카드 세트 만들기</span>
+                <button onClick={() => setTeacherMenu('menu')} className="text-back-btn">돌아가기</button>
               </div>
 
               {teacherStep === 1 ? (
                 <div style={{ textAlign: 'center', padding: '10px 0' }}>
-                  <div style={{ marginBottom: '28px' }}>
-                    <label style={{ display: 'block', color: '#6b7280', fontSize: '14px', fontWeight: 'bold', marginBottom: '12px' }}>학습 적용 일자</label>
-                    <input type="date" value={teacherDate} onChange={(e) => setTeacherDate(e.target.value)} style={{ background: 'rgba(255,255,255,0.04)', color: '#fff', border: 'none', padding: '14px 24px', borderRadius: '14px', fontSize: '17px', textAlign: 'center', width: '80%', outline: 'none' }} />
+                  <div style={{ marginBottom: '24px' }}>
+                    <label style={{ display: 'block', color: '#6b7280', fontSize: '13px', fontWeight: 'bold', marginBottom: '10px' }}>학습 적용 일자</label>
+                    <input type="date" value={teacherDate} onChange={(e) => setTeacherDate(e.target.value)} style={{ background: 'rgba(255,255,255,0.04)', color: '#fff', border: 'none', padding: '14px 24px', borderRadius: '14px', fontSize: '16px', textAlign: 'center', width: '85%', outline: 'none' }} />
                   </div>
-                  <div style={{ marginBottom: '35px' }}>
-                    <label style={{ display: 'block', color: '#6b7280', fontSize: '14px', fontWeight: 'bold', marginBottom: '12px' }}>생성할 단어 총량</label>
+                  <div style={{ marginBottom: '30px' }}>
+                    <label style={{ display: 'block', color: '#6b7280', fontSize: '13px', fontWeight: 'bold', marginBottom: '10px' }}>생성할 단어 총량</label>
                     <input type="number" value={cardCount} min="1" max="50" onChange={(e) => setCardCount(e.target.value)} style={{ background: 'rgba(255,255,255,0.04)', color: '#fff', border: 'none', padding: '14px', borderRadius: '14px', fontSize: '17px', textAlign: 'center', width: '100px', outline: 'none' }} />
                   </div>
-                  <button onClick={proceedToStep2} className="mini-start-btn" style={{ width: '100%', background: '#7c3aed', color: '#fff', padding: '16px 0', borderRadius: '16px', fontSize: '17px' }}>입력 양식 활성화 ➡️</button>
+                  <button onClick={proceedToStep2} className="mini-start-btn" style={{ width: '100%', background: '#7c3aed', color: '#fff', padding: '16px 0', borderRadius: '16px' }}>입력 양식 생성하기</button>
                 </div>
               ) : (
+                /* 🛠️ 4번 개선: 미디어 가로 찢어짐을 원천 제거하기 위한 유동형 로우 인풋 팩 개편 */
                 <div>
-                  <h4 style={{ margin: '0 0 18px 0', textAlign: 'center', fontSize: '15px', color: '#a0aec0' }}>날짜: {teacherDate} / 수량: {cardCount}개 작성 리스트</h4>
+                  <h4 style={{ margin: '0 0 15px 0', textAlign: 'center', fontSize: '14px', color: '#a0aec0' }}>{teacherDate} / 총 {cardCount}개 작성 목록</h4>
                   <div style={{ maxHeight: '320px', overflowY: 'auto', marginBottom: '25px', paddingRight: '4px' }}>
                     {inputWords.map((word, idx) => (
-                      <div key={idx} style={{ display: 'flex', gap: '10px', marginBottom: '12px', alignItems: 'center' }}>
-                        <span style={{ fontSize: '14px', color: '#4a5568', width: '20px', fontWeight: 'bold' }}>{idx+1}</span>
+                      <div key={idx} className="input-row-container">
+                        <span style={{ fontSize: '13px', color: '#4a5568', width: '20px', fontWeight: 'bold', textAlign: 'center' }}>{idx+1}</span>
                         <input placeholder="일본어" value={word.kanji} onChange={e => { const n = [...inputWords]; n[idx].kanji = e.target.value; setInputWords(n); }} className="input-dark" />
-                        <input placeholder="의미 뜻" value={word.meaning} onChange={e => { const n = [...inputWords]; n[idx].meaning = e.target.value; setInputWords(n); }} className="input-dark" />
+                        <input placeholder="뜻" value={word.meaning} onChange={e => { const n = [...inputWords]; n[idx].meaning = e.target.value; setInputWords(n); }} className="input-dark" />
                       </div>
                     ))}
                   </div>
                   <div style={{ display: 'flex', gap: '12px' }}>
                     <button onClick={() => setTeacherStep(1)} style={{ background: 'rgba(255,255,255,0.05)', color: '#fff', border: 'none', padding: '14px 24px', borderRadius: '14px', cursor: 'pointer', fontSize: '15px' }}>이전</button>
-                    <button onClick={handleSaveDeck} style={{ flex: 1, background: '#7c3aed', color: '#fff', border: 'none', borderRadius: '14px', fontWeight: 'bold', cursor: 'pointer', fontSize: '16px' }}>데이터 세이브 업로드 🚀</button>
+                    <button onClick={handleSaveDeck} style={{ flex: 1, background: '#7c3aed', color: '#fff', border: 'none', borderRadius: '14px', fontWeight: 'bold', cursor: 'pointer', fontSize: '16px' }}>서버 업로드 및 완료</button>
                   </div>
                 </div>
               )}
             </div>
           )}
 
-          {/* [선생님 세부 기능 2: 웅장하게 정렬되는 저장소 리스트 필드] */}
+          {/* 등록된 카드 세트 목록 패널 */}
           {teacherMenu === 'view' && (
             <div>
               <div className="header-row">
-                <span style={{ fontSize: '18px', fontWeight: 'bold', color: '#00ffcc' }}>📂 등록된 카드 세트 목록</span>
-                <button onClick={() => { previewWords.length > 0 ? setPreviewWords([]) : setTeacherMenu('menu'); }} className="home-icon-btn">🔙</button>
+                <span style={{ fontSize: '17px', fontWeight: 'bold', color: '#00ffcc' }}>등록된 카드 세트 목록</span>
+                <button onClick={() => { previewWords.length > 0 ? setPreviewWords([]) : setTeacherMenu('menu'); }} className="text-back-btn">돌아가기</button>
               </div>
 
               {previewWords.length === 0 ? (
+                /* 🛠️ 3번 개선: 세로 대형 리스트 카드 간의 좌우 밸런스 및 gap 요소 튜닝 적용 */
                 <div className="date-list-vertical">
                   {dateList.map((item) => (
                     <div key={item.date} className="date-card-large">
                       <div className="date-label">{item.date}</div>
-                      <button onClick={() => fetchDeckPreview(item.date)} className="mini-start-btn" style={{ background: '#7c3aed', color: '#fff' }}>덱 단어 조회</button>
+                      <button onClick={() => fetchDeckPreview(item.date)} className="mini-start-btn" style={{ background: '#7c3aed', color: '#fff' }}>단어 조회</button>
                     </div>
                   ))}
-                  {dateList.length === 0 && <p style={{ color: '#4b5563', fontSize: '14px', textAlign: 'center', padding: '20px' }}>저장된 세트 내역이 비어있습니다.</p>}
+                  {dateList.length === 0 && <p style={{ color: '#4b5563', fontSize: '14px', textAlign: 'center' }}>데이터 보관함이 비어있습니다.</p>}
                 </div>
               ) : (
                 <div style={{ marginTop: '10px' }}>
-                  <h4 style={{ margin: '0 0 15px 0', color: '#00ffcc', fontSize: '16px' }}>📑 {previewDate} 카드 구성 상세 정보</h4>
+                  <h4 style={{ margin: '0 0 15px 0', color: '#00ffcc', fontSize: '15px' }}>{previewDate} 구성 리스트</h4>
                   <div style={{ maxHeight: '300px', overflowY: 'auto', background: 'rgba(0,0,0,0.2)', padding: '16px', borderRadius: '20px' }}>
                     <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '15px' }}>
                       <thead>
                         <tr style={{ borderBottom: '1px solid rgba(255,255,255,0.08)', color: '#718096', textAlign: 'left' }}>
-                          <th style={{ paddingBottom: '10px', width: '50px' }}>순번</th>
+                          <th style={{ paddingBottom: '10px', width: '50px' }}>번호</th>
                           <th style={{ paddingBottom: '10px' }}>일본어</th>
                           <th style={{ paddingBottom: '10px' }}>해석 뜻</th>
                         </tr>
@@ -278,19 +278,18 @@ function App() {
         </div>
       )}
 
-      {/* ==================== 2. 🎒 학생용 학습 구동 컴포넌트 ==================== */}
+      {/* ==================== 2. 🎒 학생용 학습 구동 유닛 ==================== */}
       {currentMode === 'student' && !showPasswordModal && (
         <div className="dashboard-box">
           
-          {/* [학생: 게임 구동 전 큼직한 가로 확장형 카드 목록] */}
           {!hasStarted ? (
             <div>
               <div className="header-row">
-                <h2 style={{ fontSize: '22px', margin: 0, fontWeight: '800', letterSpacing: '-0.3px' }}>
-                  📚 오늘의 플래시 단어 카드
+                <h2 style={{ fontSize: '21px', margin: 0, fontWeight: '800', letterSpacing: '-0.3px' }}>
+                  오늘의 플래시 단어 카드
                 </h2>
               </div>
-              <p style={{ color: '#6b7280', fontSize: '14px', margin: '0 0 20px 0' }}>학습을 시작할 스케줄 날짜 카드의 시작 버튼을 누르세요.</p>
+              <p style={{ color: '#6b7280', fontSize: '14px', margin: '0 0 20px 0' }}>학습할 날짜의 카드를 터치해 시작해 주세요.</p>
               
               <div className="date-list-vertical">
                 {dateList.map((item) => (
@@ -302,16 +301,15 @@ function App() {
                   </div>
                 ))}
                 {dateList.length === 0 && (
-                  <p style={{ color: '#4b5563', fontSize: '14px', textAlign: 'center', padding: '40px 0' }}>출제된 일본어 단어 세트 카드가 없습니다.</p>
+                  <p style={{ color: '#4b5563', fontSize: '14px', textAlign: 'center', padding: '40px 0' }}>등록된 카드 세트가 아직 존재하지 않습니다.</p>
                 )}
               </div>
             </div>
           ) : (
-            /* [학생: 완벽히 선명해진 초대형 플래시 카드 필드] */
             currentIndex < words.length ? (
               <div>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', color: '#9ca3af', fontSize: '14px', marginBottom: '12px' }}>
-                  <span>학습 진행 상황</span>
+                  <span>진행 상황</span>
                   <span style={{ color: '#00ffcc', fontWeight: '800', fontSize: '16px' }}>{currentIndex + 1} / {words.length}</span>
                 </div>
                 
@@ -319,26 +317,24 @@ function App() {
                   <div className="progress-bar-fill" style={{ width: `${progressPercent}%` }}></div>
                 </div>
 
-                {/* 흐림 보정이 들어간 확장형 3D 플립 카드 컴포넌트 */}
+                {/* 🛠️ 5번 개선: 화면을 꽉 채우며 가독성을 최고치로 높인 와이드 매칭 카드 */}
                 <div className={`card-container ${isFlipped ? 'flipped' : ''}`} onClick={() => setIsFlipped(!isFlipped)}>
                   <div className="card-inner">
                     
-                    {/* 카드 앞면 */}
                     <div className="card-front">
                       <span style={{ fontSize: '13px', color: '#6b7280', letterSpacing: '1.5px', position: 'absolute', top: '24px', fontWeight: 'bold' }}>일본어 문제</span>
-                      <div style={{ fontSize: 'clamp(32px, 7vw, 48px)', fontWeight: '900', color: '#00ffcc' }}>
+                      <div style={{ fontSize: 'clamp(34px, 7.5vw, 52px)', fontWeight: '900', color: '#00ffcc', textAlign: 'center', width: '100%', wordBreak: 'break-all' }}>
                         {words[currentIndex].kanji}
                       </div>
-                      <span style={{ fontSize: '13px', color: '#4b5563', position: 'absolute', bottom: '24px' }}>카드를 터치하면 뒤집힙니다 🔮</span>
+                      <span style={{ fontSize: '13px', color: '#4b5563', position: 'absolute', bottom: '24px' }}>카드를 터치하면 정답이 보입니다</span>
                     </div>
 
-                    {/* 카드 뒷면 */}
                     <div className="card-back">
                       <span style={{ fontSize: '13px', color: 'rgba(255,255,255,0.5)', letterSpacing: '1.5px', position: 'absolute', top: '24px', fontWeight: 'bold' }}>한국어 해석</span>
-                      <div style={{ fontSize: 'clamp(28px, 6.5vw, 40px)', fontWeight: '800', color: '#ffffff' }}>
+                      <div style={{ fontSize: 'clamp(28px, 6.5vw, 42px)', fontWeight: '800', color: '#ffffff', textAlign: 'center', width: '100%', wordBreak: 'break-all' }}>
                         {words[currentIndex].meaning}
                       </div>
-                      <span style={{ fontSize: '12px', color: 'rgba(255,255,255,0.3)', position: 'absolute', bottom: '24px' }}>다시 터치하면 원어로 회전 ↩️</span>
+                      <span style={{ fontSize: '12px', color: 'rgba(255,255,255,0.3)', position: 'absolute', bottom: '24px' }}>다시 터치하면 원래대로 돌아갑니다</span>
                     </div>
 
                   </div>
@@ -361,21 +357,19 @@ function App() {
                     color: isFlipped ? '#0b0c10' : '#ffffff'
                   }}
                 >
-                  {isFlipped ? "다음 단어 카드로 넘어가기 ➡️" : "정답 매칭 확인하기 👀"}
+                  {isFlipped ? "다음 단어 카드로 이동하기" : "정답 확인하기"}
                 </button>
               </div>
             ) : (
-              /* 완료 축하 스크린 */
               <div style={{ textAlign: 'center', padding: '45px 0' }}>
-                <div style={{ fontSize: '55px', marginBottom: '15px' }}>⚡</div>
-                <h3 style={{ fontSize: '24px', margin: '0 0 12px 0', color: '#00ffcc', fontWeight: '800' }}>단어 학습 미션 완료!</h3>
-                <p style={{ color: '#9ca3af', fontSize: '15px', marginBottom: '30px', lineHeight: '1.6' }}>오늘 배정된 플래시 무작위 카드를<br />성공적으로 전부 암기하셨습니다.</p>
+                <h3 style={{ fontSize: '24px', margin: '0 0 12px 0', color: '#00ffcc', fontWeight: '800' }}>단어 학습 완료!</h3>
+                <p style={{ color: '#9ca3af', fontSize: '15px', marginBottom: '30px' }}>오늘 분량의 플래시 카드를 모두 암기하셨습니다.</p>
                 <button 
                   onClick={() => setHasStarted(false)} 
                   className="action-btn-main"
                   style={{ background: 'rgba(255,255,255,0.04)', color: '#fff', width: 'auto', padding: '14px 40px', borderRadius: '22px', fontSize: '15px' }}
                 >
-                  학습 목록 페이지로 가기
+                  목록 페이지로 가기
                 </button>
               </div>
             )
