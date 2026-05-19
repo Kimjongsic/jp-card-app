@@ -22,14 +22,15 @@ body {
   background: radial-gradient(circle at top right, #ebe6dc, #f7f5f0);
 }
 
-/* 전통 창살 및 대나무 선 느낌의 정갈한 대시보드 메인 박스 */
+/* ⛩️ 대시보드 폭 동기화 패치: 고정폭 400px을 부여하여 1단계와 2단계 너비를 강제로 일치시킵니다 */
 .dashboard-box {
   background: #ffffff;
   border-radius: 16px;
   padding: 30px;
   border: 2px solid #e6dec9; /* 전통적인 직물/가구 톤의 베이지 테두리 */
   box-shadow: 0 8px 24px rgba(43, 43, 43, 0.04);
-  width: 100%;
+  width: 400px;
+  max-width: 100%; /* 모바일 환경에서 화면 밖으로 터지는 현상 방어 */
 }
 
 /* 첫 화면 역할 선택 카드 */
@@ -87,8 +88,8 @@ body {
   background: #a73838; /* 신사 도리이의 적색 */
   color: #ffffff;
   border: none;
-  padding: 8px 0;
-  border-radius: 6px;
+  padding: 14px 0; /* 단추의 세로 볼륨감을 주어 고급스럽게 변경 */
+  border-radius: 12px;
   font-weight: bold;
   cursor: pointer;
   width: 100%;
@@ -102,7 +103,8 @@ body {
 /* 3D 카드 플립 스타일 */
 .card-container {
   perspective: 1000px;
-  width: 340px;
+  width: 100%;
+  max-width: 340px;
   height: 220px;
   margin: 30px auto;
   cursor: pointer;
@@ -196,11 +198,10 @@ body {
 /* 📱 모바일 기기 반응형 대응 미디어 쿼리 */
 @media (max-width: 480px) {
   .dashboard-box {
-    padding: 18px 10px; 
+    width: 100%;
+    padding: 18px 12px; 
   }
   .card-container {
-    width: 100%;
-    max-width: 320px;
     height: 190px;
   }
   .step-indicator {

@@ -155,7 +155,7 @@ function App() {
             style={{ background: '#ffffff', border: '2px solid #e6dec9', color: '#2b2b2b', padding: '12px', borderRadius: '10px', width: '80%', textAlign: 'center', outline: 'none', marginBottom: '20px' }}
           />
           <div style={{ display: 'flex', gap: '10px', justifyContent: 'center' }}>
-            <button onClick={verifyPassword} className="mini-start-btn" style={{ width: '80px' }}>확인</button>
+            <button onClick={verifyPassword} className="mini-start-btn" style={{ width: '80px', padding: '8px 0', borderRadius: '6px' }}>확인</button>
             <button onClick={() => setShowPasswordModal(false)} style={{ background: '#ebe6dc', color: '#2b2b2b', border: 'none', padding: '8px 16px', borderRadius: '8px', cursor: 'pointer', fontWeight: '600' }}>취소</button>
           </div>
         </div>
@@ -178,35 +178,33 @@ function App() {
           </div>
 
           {teacherStep === 1 ? (
-            /* 🛠️ [설정 - 1단계] 가로폭 최대 확장 및 상하 여백 완벽 복구 패치 */
-            <div style={{ padding: '10px 0', width: '100%' }}>
-              {/* marginBottom을 28px로 늘려 레이블과 입력창 사이의 위아래 간격 확보 */}
-              <div style={{ marginBottom: '28px', width: '100%' }}>
-                <label style={{ display: 'block', color: '#555555', fontSize: '12px', fontWeight: 'bold', marginBottom: '10px', textAlign: 'center' }}>TARGET DATE</label>
+            /* 🛠️ [설정 - 1단계] 상하 마진(margin)폭을 대폭 늘려 시원하고 웅장한 이전 정렬 비율로 원복 완료 */
+            <div style={{ padding: '15px 0', width: '100%' }}>
+              <div style={{ marginBottom: '35px', width: '100%' }}>
+                <label style={{ display: 'block', color: '#555555', fontSize: '13px', fontWeight: 'bold', marginBottom: '12px', textAlign: 'center' }}>TARGET DATE</label>
                 <input 
                   type="date" 
                   value={teacherDate} 
                   onChange={(e) => setTeacherDate(e.target.value)} 
-                  style={{ width: '100%', background: '#ffffff', color: '#2b2b2b', border: '2px solid #e6dec9', padding: '12px', borderRadius: '12px', fontSize: '16px', outline: 'none', textAlign: 'center', boxSizing: 'border-box' }}
+                  style={{ width: '100%', background: '#ffffff', color: '#2b2b2b', border: '2px solid #e6dec9', padding: '14px', borderRadius: '12px', fontSize: '16px', outline: 'none', textAlign: 'center', boxSizing: 'border-box' }}
                 />
               </div>
 
-              {/* marginBottom을 36px로 원복하여 다음 단계 버튼과의 수직 간격 균형 최적화 */}
-              <div style={{ marginBottom: '36px', width: '100%', textAlign: 'center' }}>
-                <label style={{ display: 'block', color: '#555555', fontSize: '12px', fontWeight: 'bold', marginBottom: '10px' }}>CARD COUNT (개수 지정)</label>
+              <div style={{ marginBottom: '45px', width: '100%', textAlign: 'center' }}>
+                <label style={{ display: 'block', color: '#555555', fontSize: '13px', fontWeight: 'bold', marginBottom: '12px' }}>CARD COUNT (개수 지정)</label>
                 <input 
                   type="number" 
                   value={cardCount} 
                   min="1" 
                   max="50"
                   onChange={(e) => setCardCount(e.target.value)} 
-                  style={{ width: '100%', background: '#ffffff', color: '#2b2b2b', border: '2px solid #e6dec9', padding: '12px', borderRadius: '12px', fontSize: '16px', outline: 'none', textAlign: 'center', boxSizing: 'border-box' }}
+                  style={{ width: '100%', background: '#ffffff', color: '#2b2b2b', border: '2px solid #e6dec9', padding: '14px', borderRadius: '12px', fontSize: '16px', outline: 'none', textAlign: 'center', boxSizing: 'border-box' }}
                 />
                 <p style={{ color: '#555555', fontSize: '12px', marginTop: '10px', margin: '10px 0 0 0' }}>오늘 배울 단어들의 총 수량을 정합니다.</p>
               </div>
 
               <div style={{ width: '100%' }}>
-                <button onClick={proceedToStep2} className="mini-start-btn" style={{ padding: '14px 0', borderRadius: '12px', fontSize: '15px' }}>
+                <button onClick={proceedToStep2} className="mini-start-btn">
                   다음 단계로 이동 ➡️
                 </button>
               </div>
@@ -275,7 +273,7 @@ function App() {
                 {dateList.map((item) => (
                   <div key={item.date} className="date-card">
                     <div className="date-label">{item.date}</div>
-                    <button onClick={() => startLearning(item.date)} className="mini-start-btn">
+                    <button onClick={() => startLearning(item.date)} className="mini-start-btn" style={{ padding: '8px 0', borderRadius: '6px' }}>
                       시작
                     </button>
                   </div>
