@@ -107,7 +107,7 @@ function App() {
   return (
     <div style={{ maxWidth: '500px', width: '100%', padding: '20px', boxSizing: 'border-box' }}>
       
-      {/* 글로벌 상단 홈 버튼 (도리이 테마 반영) */}
+      {/* 글로벌 상단 홈 버튼 */}
       {currentMode !== 'landing' && !showPasswordModal && (
         <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: '20px' }}>
           <button 
