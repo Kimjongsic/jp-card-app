@@ -105,8 +105,7 @@ function App() {
   const progressPercent = words.length > 0 ? (currentIndex / words.length) * 100 : 0;
 
   return (
-    /* 최외각 루트 컨테이너의 모바일 좌우 패딩을 12px로 늘려 기기 가장자리 밀착 방지 */
-    <div style={{ maxWidth: '500px', width: '100%', padding: '20px 12px', boxSizing: 'border-box', margin: '0 auto' }}>
+    <div style={{ maxWidth: '500px', width: '100%', padding: '20px', boxSizing: 'border-box' }}>
       
       {/* 글로벌 상단 홈 버튼 */}
       {currentMode !== 'landing' && !showPasswordModal && (
@@ -165,6 +164,7 @@ function App() {
       {/* ==================== 1. 👨‍🏫 TEACHER(설정) MODE UI ==================== */}
       {currentMode === 'teacher' && !showPasswordModal && (
         <div className="dashboard-box">
+          {/* 🔍 줄맞춤 정렬 패치: flex 컨테이너 분할 및 기호 오프셋 보정 적용 */}
           <h2 style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '5px', fontSize: '18px', margin: '0 0 5px 0', color: '#2b2b2b', fontWeight: '700' }}>
             <span style={{ display: 'inline-flex', alignItems: 'center' }}>⚙️ 설정</span>
             <span style={{ color: '#d4ccb6', display: 'inline-flex', alignItems: 'center', transform: 'translateY(-1px)', padding: '0 2px' }}>:</span>
@@ -174,6 +174,7 @@ function App() {
           {/* 스텝 비주얼 인디케이터 */}
           <div className="step-indicator">
             <div className={`step-dot ${teacherStep === 1 ? 'active' : ''}`}>1단계: 개수 설정</div>
+            {/* 🔍 줄맞춤 정렬 패치: 폰트 베이스라인 왜곡 억제 및 세밀한 Y축 정렬 적용 */}
             <div style={{ color: '#d4ccb6', fontSize: '10px', userSelect: 'none', display: 'inline-flex', alignItems: 'center', transform: 'translateY(-0.5px)' }}>▶</div>
             <div className={`step-dot ${teacherStep === 2 ? 'active' : ''}`}>2단계: 단어 입력</div>
           </div>
@@ -209,19 +210,16 @@ function App() {
               </button>
             </div>
           ) : (
-            /* [설정 - 2단계] 유동성 단어 리스트 채우기 (가로 스크롤 완벽 억제 패치) */
+            /* [설정 - 2단계] 유동성 단어 리스트 채우기 */
             <div>
               <p style={{ color: '#2b2b2b', fontSize: '13px', textAlign: 'center', marginBottom: '20px' }}>
                 {teacherDate} 세트에 들어갈 <b style={{ color: '#a73838' }}>{cardCount}개</b>의 단어 쌍을 입력하세요.
               </p>
               
-              {/* paddingRight를 12px로 넓혀 브라우저 스크롤바가 생성되어도 우측 칸이 찌그러지거나 잘리지 않게 방어하고 가로 스크롤을 방지합니다 */}
-              <div style={{ maxHeight: '230px', overflowY: 'auto', overflowX: 'hidden', paddingRight: '12px', marginBottom: '20px' }}>
+              <div style={{ maxHeight: '230px', overflowY: 'auto', paddingRight: '5px', marginBottom: '20px' }}>
                 {inputWords.map((word, idx) => (
-                  <div key={idx} style={{ display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '8px', width: '100%' }}>
-                    <span style={{ color: '#555555', fontSize: '13px', width: '24px', textAlign: 'right', fontWeight: 'bold', display: 'inline-block', boxSizing: 'border-box', paddingRight: '2px' }}>
-                      {idx + 1}
-                    </span>
+                  <div key={idx} style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '8px' }}>
+                    <span style={{ color: '#555555', fontSize: '13px', width: '20px', fontWeight: 'bold' }}>{idx + 1}</span>
                     <input 
                       placeholder="일본어 표기" 
                       value={word.kanji} 
@@ -230,7 +228,7 @@ function App() {
                         newWords[idx] = { ...newWords[idx], kanji: e.target.value };
                         setInputWords(newWords);
                       }}
-                      style={{ flex: 1, minWidth: '0', background: '#ffffff', border: '1px solid #cbd5e1', color: '#2b2b2b', padding: '6px 8px', borderRadius: '8px', fontSize: '13px', outline: 'none' }}
+                      style={{ flex: 1, background: '#ffffff', border: '1px solid #cbd5e1', color: '#2b2b2b', padding: '8px', borderRadius: '8px', fontSize: '14px', outline: 'none' }}
                     />
                     <input 
                       placeholder="한국어 뜻" 
@@ -240,7 +238,7 @@ function App() {
                         newWords[idx] = { ...newWords[idx], meaning: e.target.value };
                         setInputWords(newWords);
                       }}
-                      style={{ flex: 1, minWidth: '0', background: '#ffffff', border: '1px solid #cbd5e1', color: '#2b2b2b', padding: '6px 8px', borderRadius: '8px', fontSize: '13px', outline: 'none' }}
+                      style={{ flex: 1, background: '#ffffff', border: '1px solid #cbd5e1', color: '#2b2b2b', padding: '8px', borderRadius: '8px', fontSize: '14px', outline: 'none' }}
                     />
                   </div>
                 ))}
