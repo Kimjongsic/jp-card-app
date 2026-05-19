@@ -50,7 +50,7 @@ function App() {
       setTeacherStep(1); // 진입 시 무조건 1단계부터 시작
     } else {
       alert("❌ 비밀번호가 일치하지 않습니다.");
-    }
+    } verification;
   };
 
   // 교사 1단계 -> 2단계 이동 (개수 확정 및 입력 폼 생성)
@@ -123,7 +123,7 @@ function App() {
       {currentMode === 'landing' && !showPasswordModal && (
         <div>
           <h1 style={{ textAlign: 'center', fontSize: '24px', marginBottom: '40px', fontWeight: '800', letterSpacing: '-0.5px', color: '#2b2b2b' }}>
-            일본어 플래시 카드
+            🌸 일본어 플래시 카드
           </h1>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
             <div className="role-select-card" onClick={() => setCurrentMode('student')}>
@@ -203,7 +203,7 @@ function App() {
               </button>
             </div>
           ) : (
-            /* [선생님 - 2단계] 유동성 단어 리스트 채우기 */
+            /* [선생님 - 2단계] 유동성 단어 리스트 채우기 (콤팩트 축소 디자인) */
             <div>
               <p style={{ color: '#2b2b2b', fontSize: '13px', textAlign: 'center', marginBottom: '20px' }}>
                 {teacherDate} 세트에 들어갈 <b style={{ color: '#a73838' }}>{cardCount}개</b>의 단어 쌍을 입력하세요.

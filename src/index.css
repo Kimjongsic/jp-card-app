@@ -1,7 +1,7 @@
 :root {
   /* 전통 와시(Washi) 종이 느낌의 부드러운 크림빛 아이보리 */
   background-color: #f7f5f0; 
-  /* 부드러운 먹색 (Sumi Black) */
+  /* 부드러운 먹색 (Ssumi Black) */
   color: #2b2b2b; 
   /* 세련되고 정갈한 모던 산세리프 폰트 스택 */
   font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, Roboto, 'Helvetica Neue', 'Segoe UI', 'Apple SD Gothic Neo', sans-serif;
@@ -146,7 +146,7 @@ body {
   transform: rotateY(180deg);
 }
 
-/* 애니메이션 진행 바 (한지 베이지 테두리 안의 주홍 잉크 채움 효과) */
+/* 애니메이션 진행 바 */
 .progress-bar-container {
   width: 100%;
   background-color: #e6dec9;
