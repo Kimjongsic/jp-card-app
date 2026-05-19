@@ -105,6 +105,7 @@ function App() {
   const progressPercent = words.length > 0 ? (currentIndex / words.length) * 100 : 0;
 
   return (
+    /* 최외각 루트 컨테이너의 모바일 좌우 패딩을 12px로 늘려 기기 가장자리 밀착 방지 */
     <div style={{ maxWidth: '500px', width: '100%', padding: '20px 12px', boxSizing: 'border-box', margin: '0 auto' }}>
       
       {/* 글로벌 상단 홈 버튼 */}
@@ -208,21 +209,19 @@ function App() {
               </button>
             </div>
           ) : (
-            /* [설정 - 2단계] 유동성 단어 리스트 채우기 */
+            /* [설정 - 2단계] 유동성 단어 리스트 채우기 (가로 스크롤 완벽 억제 패치) */
             <div>
               <p style={{ color: '#2b2b2b', fontSize: '13px', textAlign: 'center', marginBottom: '20px' }}>
                 {teacherDate} 세트에 들어갈 <b style={{ color: '#a73838' }}>{cardCount}개</b>의 단어 쌍을 입력하세요.
               </p>
               
-              {/* paddingRight 확보 및 overflowX 통제로 모바일 세로 스크롤 발생 시 좌우 뒤틀림을 완벽 차단 */}
-              <div style={{ maxHeight: '230px', overflowY: 'auto', overflowX: 'hidden', paddingRight: '8px', marginBottom: '20px' }}>
+              {/* paddingRight를 12px로 넓혀 브라우저 스크롤바가 생성되어도 우측 칸이 찌그러지거나 잘리지 않게 방어하고 가로 스크롤을 방지합니다 */}
+              <div style={{ maxHeight: '230px', overflowY: 'auto', overflowX: 'hidden', paddingRight: '12px', marginBottom: '20px' }}>
                 {inputWords.map((word, idx) => (
                   <div key={idx} style={{ display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '8px', width: '100%' }}>
-                    {/* flexShrink 지정을 통해 화면 축소 시 번호 레이아웃 깨짐을 방어 */}
-                    <span style={{ color: '#555555', fontSize: '13px', width: '24px', textAlign: 'right', fontWeight: 'bold', display: 'inline-block', boxSizing: 'border-box', paddingRight: '2px', flexShrink: 0 }}>
+                    <span style={{ color: '#555555', fontSize: '13px', width: '24px', textAlign: 'right', fontWeight: 'bold', display: 'inline-block', boxSizing: 'border-box', paddingRight: '2px' }}>
                       {idx + 1}
                     </span>
-                    {/* width 100%와 명시적인 box-sizing 부여를 통해 어떠한 브라우저 엔진에서도 뷰포트 맞춤 폭 조정 고정 */}
                     <input 
                       placeholder="일본어 표기" 
                       value={word.kanji} 
@@ -231,7 +230,7 @@ function App() {
                         newWords[idx] = { ...newWords[idx], kanji: e.target.value };
                         setInputWords(newWords);
                       }}
-                      style={{ flex: 1, width: '100%', minWidth: '0', background: '#ffffff', border: '1px solid #cbd5e1', color: '#2b2b2b', padding: '6px 8px', borderRadius: '8px', fontSize: '13px', outline: 'none', boxSizing: 'border-box' }}
+                      style={{ flex: 1, minWidth: '0', background: '#ffffff', border: '1px solid #cbd5e1', color: '#2b2b2b', padding: '6px 8px', borderRadius: '8px', fontSize: '13px', outline: 'none' }}
                     />
                     <input 
                       placeholder="한국어 뜻" 
@@ -241,7 +240,7 @@ function App() {
                         newWords[idx] = { ...newWords[idx], meaning: e.target.value };
                         setInputWords(newWords);
                       }}
-                      style={{ flex: 1, width: '100%', minWidth: '0', background: '#ffffff', border: '1px solid #cbd5e1', color: '#2b2b2b', padding: '6px 8px', borderRadius: '8px', fontSize: '13px', outline: 'none', boxSizing: 'border-box' }}
+                      style={{ flex: 1, minWidth: '0', background: '#ffffff', border: '1px solid #cbd5e1', color: '#2b2b2b', padding: '6px 8px', borderRadius: '8px', fontSize: '13px', outline: 'none' }}
                     />
                   </div>
                 ))}
