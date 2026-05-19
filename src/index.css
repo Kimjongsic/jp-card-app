@@ -1,11 +1,10 @@
 :root {
-  /* 일본 전통 색상 모티브의 밝고 따뜻한 컬러 팔레트 */
-  --bg-color: #F5F3ED; /* 화지(종이) 느낌의 따뜻한 미색 */
+  --bg-color: #F5F3ED;
   --panel-bg: #FFFFFF;
-  --text-main: #2C363F; /* 깊이 있는 청묵색 (가독성 최적화) */
+  --text-main: #2C363F;
   --text-sub: #7A8288;
-  --accent-red: #C84B31; /* 차분한 다홍/인주색 */
-  --accent-blue: #2A475E; /* 차분한 아이조메(전통 남색) */
+  --accent-red: #C84B31;
+  --accent-blue: #2A475E;
   --border-color: #E8E5DF;
   
   background-color: var(--bg-color);
@@ -24,18 +23,17 @@ body {
   box-sizing: border-box;
 }
 
-/* 정갈한 메인 화이트 패널 */
+/* 메인 패널 */
 .dashboard-box {
   background: var(--panel-bg);
   border-radius: 24px;
-  padding: 40px 24px;
+  padding: 32px 24px;
   box-shadow: 0 12px 36px rgba(0, 0, 0, 0.06);
   width: 100%;
   box-sizing: border-box;
   border: 1px solid #FFFFFF;
 }
 
-/* 역할 선택 카드 */
 .role-select-card {
   background: #FCFBFA;
   border: 1px solid var(--border-color);
@@ -52,7 +50,6 @@ body {
   transform: translateY(-4px);
 }
 
-/* 날짜 리스트 컨테이너 */
 .date-list-vertical {
   display: flex;
   flex-direction: column;
@@ -100,13 +97,12 @@ body {
   background: var(--accent-red);
 }
 
-/* 🎯 화면을 압도적으로 꽉 채우는 초대형 플래시 카드 */
+/* 🎯 개선: 글자 삐져나옴 방지 및 유동적 카드 높이 최적화 */
 .card-container {
   perspective: 1200px;
   width: 100%; 
-  /* 세로 높이를 화면의 55% 비율로 맞추어 매우 크게 설정 */
-  height: clamp(360px, 55vh, 500px); 
-  margin: 24px 0 32px 0;
+  height: clamp(340px, 50vh, 480px); /* 화면 비율에 맞게 안정적으로 꽉 차게 조절 */
+  margin: 20px 0 28px 0;
   cursor: pointer;
 }
 
@@ -134,22 +130,20 @@ body {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  /* 부드럽고 고급스러운 그림자 */
   box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
   transform: translateZ(0); 
   will-change: transform;
   padding: 24px;
   box-sizing: border-box;
+  overflow: hidden; /* 영역 밖으로 나가는 요소 차단 */
 }
 
-/* 문제 앞면 (깨끗한 화이트) */
 .card-front {
   background: #FFFFFF;
   border: 1px solid var(--border-color);
   color: var(--text-main);
 }
 
-/* 정답 뒷면 (은은한 벚꽃색 또는 연한 웜톤 믹스) */
 .card-back {
   background: #FFF9F8;
   border: 1px solid #F5E6E6;
@@ -157,7 +151,6 @@ body {
   transform: rotateY(180deg) translateZ(0);
 }
 
-/* 하단 메인 액션 버튼 */
 .action-btn-main {
   width: 100%;
   border: none;
@@ -169,7 +162,6 @@ body {
   transition: all 0.2s ease;
 }
 
-/* 선생님 입력 폼 양식 */
 .input-row-container {
   display: flex;
   gap: 12px;
@@ -197,7 +189,6 @@ body {
   background: #FFFFFF;
 }
 
-/* 교사용 메인 메뉴 버튼 */
 .teacher-main-btn {
   background: #FFFFFF;
   border: 1px solid var(--border-color);
@@ -220,14 +211,13 @@ body {
   transform: translateY(-2px);
 }
 
-/* 진행도 바 */
 .progress-bar-container {
   width: 100%;
   background-color: var(--border-color);
   border-radius: 8px;
   height: 8px;
   overflow: hidden;
-  margin-bottom: 24px;
+  margin-bottom: 20px;
 }
 .progress-bar-fill {
   background: var(--accent-red);
@@ -235,24 +225,30 @@ body {
   transition: width 0.3s ease;
 }
 
+/* 🎯 개선: 예쁜 상단 네비게이션 헤더 및 아이콘 버튼 스타일 */
 .header-row {
   display: flex;
   justify-content: space-between;
   align-items: center;
   width: 100%;
-  margin-bottom: 28px;
+  margin-bottom: 24px;
 }
 
-.text-back-btn {
-  background: transparent;
-  border: none;
+.icon-btn {
+  background: #F5F3ED;
+  border: 1px solid var(--border-color);
   color: var(--text-sub);
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   cursor: pointer;
-  font-size: 15px;
-  font-weight: 600;
-  padding: 8px 0;
-  transition: color 0.2s;
+  transition: all 0.2s;
+  padding: 0;
 }
-.text-back-btn:hover {
+.icon-btn:hover {
+  background: #E8E5DF;
   color: var(--text-main);
 }
