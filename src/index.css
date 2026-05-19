@@ -22,7 +22,7 @@ body {
   background: radial-gradient(circle at top right, #ebe6dc, #f7f5f0);
 }
 
-/* 원본의 유연하고 정갈한 가변형 대시보드 박스로 복원 */
+/* ⛩️ 대시보드 폭 균형 패치: 기본 가로폭을 max-width: 450px로 웅장하게 통일하여 모든 페이지의 크기를 시원하게 맞춥니다 */
 .dashboard-box {
   background: #ffffff;
   border-radius: 16px;
@@ -30,6 +30,8 @@ body {
   border: 2px solid #e6dec9; /* 전통적인 직물/가구 톤의 베이지 테두리 */
   box-shadow: 0 8px 24px rgba(43, 43, 43, 0.04);
   width: 100%;
+  max-width: 450px;
+  margin: 0 auto;
 }
 
 /* 첫 화면 역할 선택 카드 */
@@ -107,6 +109,12 @@ body {
   height: 220px;
   margin: 30px auto;
   cursor: pointer;
+}
+
+/* 학생 모드 전용 세로형 세련된 카드 비율 보정 */
+.student-card-mode {
+  max-width: 260px;
+  height: 360px;
 }
 
 .card-inner {
@@ -197,10 +205,7 @@ body {
 /* 📱 모바일 기기 반응형 대응 미디어 쿼리 */
 @media (max-width: 480px) {
   .dashboard-box {
-    padding: 18px 12px; 
-  }
-  .card-container {
-    height: 190px;
+    padding: 24px 16px; 
   }
   .step-indicator {
     margin-top: 16px;

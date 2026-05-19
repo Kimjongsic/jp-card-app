@@ -105,8 +105,8 @@ function App() {
   const progressPercent = words.length > 0 ? (currentIndex / words.length) * 100 : 0;
 
   return (
-    /* 원래의 가장 안정적인 가변형 반응형 상단 루트 스택(maxWidth: 500px, width: 100%)으로 복원 */
-    <div style={{ maxWidth: '500px', width: '100%', padding: '20px 12px', boxSizing: 'border-box', margin: '0 auto' }}>
+    /* 최외각 감싸는 레이아웃 상자의 너비를 시원하게 max 480px로 통일 */
+    <div style={{ width: '100%', maxWidth: '480px', padding: '20px 16px', boxSizing: 'border-box', margin: '0 auto' }}>
       
       {/* 글로벌 상단 홈 버튼 */}
       {currentMode !== 'landing' && !showPasswordModal && (
@@ -122,7 +122,7 @@ function App() {
 
       {/* ==================== 0. LANDING VIEW (역할 선택 첫 화면) ==================== */}
       {currentMode === 'landing' && !showPasswordModal && (
-        <div>
+        <div className="dashboard-box">
           <h1 style={{ textAlign: 'center', fontSize: '24px', marginBottom: '40px', fontWeight: '800', letterSpacing: '-0.5px', color: '#2b2b2b' }}>
             🌸 일본어 플래시 카드
           </h1>
@@ -179,9 +179,9 @@ function App() {
           </div>
 
           {teacherStep === 1 ? (
-            /* 🛠️ 1단계 전용 복원 패치: 원래 정렬 방식(flex 정렬 및 자식 크기 한정)으로 되돌려 1단계 대시보드 폭을 예쁘게 컴팩트 수축시켰으며, 요청하신 쾌적한 이전 상하 정렬 여백 간격(35px, 45px)을 보존했습니다. */
-            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '15px 0', width: '100%' }}>
-              <div style={{ marginBottom: '35px', width: '100%', maxWidth: '340px' }}>
+            /* [설정 - 1단계] 가로 전체폭 충전 및 정갈한 상하마진 비율 완벽 유지 */
+            <div style={{ padding: '15px 0', width: '100%' }}>
+              <div style={{ marginBottom: '35px', width: '100%' }}>
                 <label style={{ display: 'block', color: '#555555', fontSize: '13px', fontWeight: 'bold', marginBottom: '12px', textAlign: 'center' }}>TARGET DATE</label>
                 <input 
                   type="date" 
@@ -191,7 +191,7 @@ function App() {
                 />
               </div>
 
-              <div style={{ marginBottom: '45px', width: '100%', maxWidth: '340px', textAlign: 'center' }}>
+              <div style={{ marginBottom: '45px', width: '100%', textAlign: 'center' }}>
                 <label style={{ display: 'block', color: '#555555', fontSize: '13px', fontWeight: 'bold', marginBottom: '12px' }}>CARD COUNT (개수 지정)</label>
                 <input 
                   type="number" 
@@ -204,7 +204,7 @@ function App() {
                 <p style={{ color: '#555555', fontSize: '12px', marginTop: '10px', margin: '10px 0 0 0' }}>오늘 배울 단어들의 총 수량을 정합니다.</p>
               </div>
 
-              <div style={{ width: '100%', maxWidth: '340px' }}>
+              <div style={{ width: '100%' }}>
                 <button onClick={proceedToStep2} className="mini-start-btn">
                   다음 단계로 이동 ➡️
                 </button>
@@ -287,26 +287,30 @@ function App() {
           ) : (
             /* 카드 맞추기 인게임 플레이 화면 */
             currentIndex < words.length ? (
-              <div>
-                <div style={{ display: 'flex', justifyContent: 'space-between', color: '#555555', fontSize: '13px', marginBottom: '8px' }}>
+              /* 🛠️ 레이아웃 수축 제거 정렬 고정: 정렬 박스에 flex를 걸어 카드가 한가운데에 오게 지탱하면서 폭을 가득 넓힙니다 */
+              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', width: '100%' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', color: '#555555', fontSize: '13px', marginBottom: '8px', width: '100%' }}>
                   <span>진행</span>
                   <span style={{ color: '#a73838', fontWeight: 'bold' }}>{currentIndex + 1} / {words.length}</span>
                 </div>
                 
-                <div className="progress-bar-container">
+                <div className="progress-bar-container" style={{ width: '100%' }}>
                   <div className="progress-bar-fill" style={{ width: `${progressPercent}%` }}></div>
                 </div>
 
-                <div className={`card-container ${isFlipped ? 'flipped' : ''}`} onClick={() => setIsFlipped(!isFlipped)}>
+                {/* 🔍 세로형 단어장 핏팅 클래스 추가: 동양적 서책 비주얼 복원 */}
+                <div className="card-container student-card-mode" onClick={() => setIsFlipped(!isFlipped)}>
                   <div className="card-inner">
                     <div className="card-front">
                       <span style={{ fontSize: '12px', color: '#555555', letterSpacing: '2px', position: 'absolute', top: '20px' }}>JAPANESE</span>
-                      <div style={{ fontSize: '32px', fontWeight: 'bold' }}>{words[currentIndex].kanji}</div>
+                      <div style={{ fontSize: '32px', fontWeight: 'bold', writingMode: 'vertical-rl', textOrientation: 'upright', letterSpacing: '4px' }}>
+                        {words[currentIndex].kanji}
+                      </div>
                       <span style={{ fontSize: '11px', color: '#94a3b8', position: 'absolute', bottom: '20px' }}>TAP TO FLIP 🌸</span>
                     </div>
                     <div className="card-back">
                       <span style={{ fontSize: '12px', color: 'rgba(255,255,255,0.6)', letterSpacing: '2px', position: 'absolute', top: '20px' }}>MEANING</span>
-                      <div style={{ fontSize: '28px', fontWeight: 'bold' }}>{words[currentIndex].meaning}</div>
+                      <div style={{ fontSize: '26px', fontWeight: 'bold', padding: '0 15px' }}>{words[currentIndex].meaning}</div>
                       <span style={{ fontSize: '11px', color: 'rgba(255,255,255,0.4)', position: 'absolute', bottom: '20px' }}>TAP TO RETURN ↩️</span>
                     </div>
                   </div>
