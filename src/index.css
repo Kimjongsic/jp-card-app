@@ -1,63 +1,65 @@
 :root {
-  /* 전통 와시(Washi) 종이 느낌의 부드러운 크림빛 아이보리 */
   background-color: #f7f5f0; 
-  /* 부드러운 먹색 (Sumi Black) */
   color: #2b2b2b; 
-  /* 세련되고 정갈한 모던 산세리프 폰트 스택 */
   font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, Roboto, 'Helvetica Neue', 'Segoe UI', 'Apple SD Gothic Neo', sans-serif;
   letter-spacing: -0.3px;
 }
 
 body {
   margin: 0;
+  padding: 0; /* 불필요한 바깥 여백을 없애서 폭을 확보합니다 */
   display: flex;
   justify-content: center;
   align-items: center;
   min-height: 100vh;
   background: radial-gradient(circle at top right, #ebe6dc, #f7f5f0);
+  box-sizing: border-box;
 }
 
-/* 전통 창살 및 대나무 선 느낌의 정갈한 대시보드 메인 박스 */
+* {
+  box-sizing: border-box;
+}
+
 .dashboard-box {
   background: #ffffff;
-  border-radius: 16px;
-  padding: 30px;
-  border: 2px solid #e6dec9; /* 전통적인 직물/가구 톤의 베이지 테두리 */
-  box-shadow: 0 8px 24px rgba(43, 43, 43, 0.04);
+  border-radius: 20px;
+  padding: 30px 20px; 
+  border: 2px solid #e6dec9; 
+  box-shadow: 0 8px 30px rgba(43, 43, 43, 0.05);
+  width: 100%;
 }
 
-/* 첫 화면 역할 선택 카드 */
 .role-select-card {
   background: #ffffff;
   border: 2px solid #e6dec9;
-  border-radius: 12px;
-  padding: 30px;
+  border-radius: 16px;
+  padding: 28px 20px;
   text-align: center;
   cursor: pointer;
   transition: all 0.3s ease;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.01);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.02);
+  width: 100%;
 }
 
 .role-select-card:hover {
   transform: translateY(-4px);
-  border-color: #a73838; /* 전통 주홍/벵가라 적색 */
+  border-color: #a73838; 
   background-color: #fdfcf7;
   box-shadow: 0 10px 20px rgba(167, 56, 56, 0.08);
 }
 
-/* 학생용 날짜 카드 그리드 */
 .date-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
-  gap: 15px;
-  margin-top: 20px;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 14px;
+  margin-top: 24px;
 }
 
 .date-card {
   background: #ffffff;
   border: 1px solid #dcd6cd;
-  padding: 20px;
-  border-radius: 12px;
+  padding: 20px 12px;
+  border-radius: 14px;
   text-align: center;
   transition: all 0.2s ease;
   border-bottom: 3px solid #cbd5e1;
@@ -71,19 +73,18 @@ body {
 }
 
 .date-label {
-  font-size: 14px;
+  font-size: 15px;
   color: #4a4a4a;
-  margin-bottom: 12px;
-  font-weight: 600;
+  margin-bottom: 16px;
+  font-weight: 700;
 }
 
 .mini-start-btn {
-  background: #a73838; /* 신사 도리이의 적색 */
+  background: #a73838; 
   color: #ffffff;
   border: none;
-  padding: 8px 0;
-  border-radius: 6px;
-  font-weight: bold;
+  border-radius: 10px;
+  font-weight: 700;
   cursor: pointer;
   width: 100%;
   transition: background 0.2s;
@@ -93,12 +94,12 @@ body {
   background: #8c2e2e;
 }
 
-/* 3D 카드 플립 스타일 */
+/* ⛩️ [핵심] 넓은 카드 크기 보장 */
 .card-container {
   perspective: 1000px;
-  width: 340px;
-  height: 220px;
-  margin: 30px auto;
+  width: 100%; /* 대시보드 내부를 꽉 채웁니다 (화면 폭의 약 80~85% 수준 확보됨) */
+  aspect-ratio: 1.4 / 1; /* 이상적인 넓은 직사각형 플래시 카드 비율 */
+  margin: 20px auto;
   cursor: pointer;
 }
 
@@ -107,7 +108,7 @@ body {
   width: 100%;
   height: 100%;
   text-align: center;
-  transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
   transform-style: preserve-3d;
 }
 
@@ -121,39 +122,50 @@ body {
   height: 100%;
   -webkit-backface-visibility: hidden;
   backface-visibility: hidden;
-  border-radius: 12px;
+  border-radius: 20px; 
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.04);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+  padding: 10px; /* 불필요한 내부 패딩을 없애 텍스트가 넓게 퍼지게 함 */
 }
 
-/* 앞면 (일본어 표기) */
 .card-front {
   background: #ffffff;
   color: #a73838;
-  border: 2px solid #a73838;
+  border: 4px solid #a73838;
   transform: rotateY(0deg);
   z-index: 2;
 }
 
-/* 뒷면 (한국어 뜻) */
 .card-back {
   background: linear-gradient(135deg, #1b2a4a, #111a30); 
   color: #c5a059; 
-  border: 2px solid #c5a059;
+  border: 4px solid #c5a059;
   transform: rotateY(180deg);
 }
 
-/* 애니메이션 진행 바 */
+/* ⛩️ [텍스트 최적화] 카드가 넓어짐에 따라 텍스트도 알맞은 크기 유지 */
+.word-text {
+  font-size: clamp(24px, 7vw, 42px);
+  font-weight: 800;
+  word-break: keep-all; 
+  line-height: 1.3;
+  margin: 0;
+}
+
+.card-back .word-text {
+  font-size: clamp(20px, 6vw, 36px);
+}
+
 .progress-bar-container {
   width: 100%;
   background-color: #e6dec9;
   border-radius: 10px;
-  height: 8px;
+  height: 12px;
   overflow: hidden;
-  margin-bottom: 20px;
+  margin-bottom: 24px;
 }
 
 .progress-bar-fill {
@@ -162,27 +174,47 @@ body {
   transition: width 0.3s ease;
 }
 
-/* 설정 창 스텝 표시기 레이아웃 */
 .step-indicator {
   display: flex;
   justify-content: center;
   align-items: center;
   gap: 12px;
-  margin-top: 25px;    
-  margin-bottom: 35px; 
+  margin-top: 20px;    
+  margin-bottom: 24px; 
+  flex-wrap: wrap; 
 }
 
 .step-dot {
   font-size: 14px;
-  font-weight: 500;
+  font-weight: 600;
   color: #888888;
-  padding-bottom: 4px;
+  padding-bottom: 6px;
   border-bottom: 2px solid transparent;
   transition: all 0.2s ease;
 }
 
 .step-dot.active {
   color: #a73838;
-  font-weight: 700;
+  font-weight: 800;
   border-bottom: 2px solid #a73838;
+}
+
+/* 스마트폰 세로 모드 대응 여백 최소화 */
+@media (max-width: 480px) {
+  .dashboard-box {
+    padding: 24px 12px; /* 좌우 여백을 줄여서 카드가 훨씬 더 넓어지게 만듭니다 */
+  }
+  
+  .date-grid {
+    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  }
+  
+  .word-input-row {
+    gap: 6px !important;
+  }
+  
+  .word-input-row input {
+    padding: 10px 8px !important;
+    font-size: 14px !important;
+  }
 }
