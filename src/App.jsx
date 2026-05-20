@@ -7,12 +7,14 @@ function App() {
   const [showPasswordModal, setShowPasswordModal] = useState(false);
   const [passwordInput, setPasswordInput] = useState('');
   
+  // 교사 모드 내 탭 상태 ('create' = 생성, 'manage' = 관리/삭제)
+  const [teacherView, setTeacherView] = useState('create');
   const [teacherStep, setTeacherStep] = useState(1);
   const [cardCount, setCardCount] = useState(15);
-  const [teacherDate, setTeacherDate] = useState(new Date().toISOString().split('T')[0]);
+  const [deckTitle, setDeckTitle] = useState('');
   const [inputWords, setInputWords] = useState([]);
 
-  const [dateList, setDateList] = useState([]); 
+  const [deckList, setDeckList] = useState([]); 
   const [words, setWords] = useState([]);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isFlipped, setIsFlipped] = useState(false);
@@ -21,15 +23,15 @@ function App() {
   const TEACHER_PASSWORD = import.meta.env.VITE_TEACHER_PASSWORD || "1234";
 
   useEffect(() => {
-    fetchDateList();
+    fetchDeckList();
   }, []);
 
-  const fetchDateList = async () => {
+  const fetchDeckList = async () => {
     const { data } = await supabase
       .from('word_sets')
-      .select('date')
+      .select('id, date')
       .order('date', { ascending: false });
-    if (data) setDateList(data);
+    if (data) setDeckList(data);
   };
 
   const handleTeacherAccess = () => {
@@ -41,13 +43,20 @@ function App() {
       setShowPasswordModal(false);
       setPasswordInput('');
       setCurrentMode('teacher');
+      setTeacherView('create'); // 설정 진입 시 기본은 생성 탭
       setTeacherStep(1);
+      setDeckTitle(''); 
+      setCardCount(15);
     } else {
       alert("❌ 비밀번호가 일치하지 않습니다.");
     }
   };
 
   const proceedToStep2 = () => {
+    if (!deckTitle.trim()) {
+      alert("단어장 제목을 입력해 주세요.\n(예: JLPT N3 필수 단어)");
+      return;
+    }
     if (cardCount < 1 || cardCount > 50) {
       alert("카드 개수는 1개부터 50개까지만 설정 가능합니다.");
       return;
@@ -63,23 +72,44 @@ function App() {
       return;
     }
 
-    const { error: setErr } = await supabase.from('word_sets').upsert({ id: teacherDate, date: teacherDate });
-    if (setErr) return alert("❌ 세트 저장 중 오류 발생");
+    const setId = deckTitle.trim();
 
-    await supabase.from('words').delete().eq('set_id', teacherDate);
+    const { error: setErr } = await supabase.from('word_sets').upsert({ id: setId, date: setId });
+    if (setErr) {
+      console.error(setErr);
+      return alert("❌ 저장 오류 발생! Supabase word_sets 테이블 설정을 확인해주세요.");
+    }
 
-    const wordsToInsert = filtered.map(w => ({ set_id: teacherDate, kanji: w.kanji, meaning: w.meaning }));
+    await supabase.from('words').delete().eq('set_id', setId);
+
+    const wordsToInsert = filtered.map(w => ({ set_id: setId, kanji: w.kanji, meaning: w.meaning }));
     const { error: wordErr } = await supabase.from('words').insert(wordsToInsert);
 
     if (!wordErr) {
-      alert("⛩️ 오늘의 일본어 카드 덱이 생성되었습니다!");
-      fetchDateList();
+      alert("⛩️ 단어장 생성이 완료되었습니다!");
+      fetchDeckList();
       setCurrentMode('landing');
     }
   };
 
-  const startLearning = async (dateId) => {
-    const { data } = await supabase.from('words').select('*').eq('set_id', dateId);
+  const handleDeleteDeck = async (deckId) => {
+    const isConfirm = window.confirm(`정말 "${deckId}" 단어장을 삭제하시겠습니까?\n포함된 모든 단어가 함께 영구 삭제됩니다.`);
+    if (!isConfirm) return;
+
+    await supabase.from('words').delete().eq('set_id', deckId);
+    const { error } = await supabase.from('word_sets').delete().eq('id', deckId);
+
+    if (error) {
+      console.error(error);
+      alert("❌ 삭제 중 오류가 발생했습니다.");
+    } else {
+      alert("🗑️ 단어장이 성공적으로 삭제되었습니다.");
+      fetchDeckList(); 
+    }
+  };
+
+  const startLearning = async (deckId) => {
+    const { data } = await supabase.from('words').select('*').eq('set_id', deckId);
 
     if (data && data.length > 0) {
       const shuffled = [...data].sort(() => Math.random() - 0.5);
@@ -88,7 +118,7 @@ function App() {
       setIsFlipped(false);
       setHasStarted(true);
     } else {
-      alert("🫙 해당 날짜에 생성된 단어 카드가 없습니다.");
+      alert("🫙 해당 단어장에 생성된 카드가 없습니다.");
     }
   };
 
@@ -97,6 +127,7 @@ function App() {
   return (
     <div style={{ maxWidth: '500px', width: '92vw', margin: '0 auto', padding: '20px 0', boxSizing: 'border-box' }}>
       
+      {/* 글로벌 상단 홈 버튼 */}
       {currentMode !== 'landing' && !showPasswordModal && (
         <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: '16px' }}>
           <button 
@@ -108,6 +139,7 @@ function App() {
         </div>
       )}
 
+      {/* ==================== 0. LANDING VIEW (첫 화면 역할 선택) ==================== */}
       {currentMode === 'landing' && !showPasswordModal && (
         <div style={{ width: '100%' }}>
           <h1 style={{ textAlign: 'center', fontSize: '26px', marginBottom: '32px', fontWeight: '800', letterSpacing: '-0.5px', color: '#2b2b2b' }}>
@@ -117,18 +149,20 @@ function App() {
             <div className="role-select-card" onClick={() => setCurrentMode('student')}>
               <div style={{ fontSize: '40px', marginBottom: '12px' }}>👥</div>
               <h2 style={{ fontSize: '20px', margin: '0 0 8px 0', color: '#a73838' }}>학생 입장</h2>
-              <p style={{ color: '#555555', fontSize: '14px', margin: 0, lineBreak: 'anywhere' }}>선생님이 등록한 날짜별 서책 카드를 무작위로 학습합니다.</p>
+              {/* ⛩️ "서책 카드" -> "단어장 카드" 로 수정 */}
+              <p style={{ color: '#555555', fontSize: '14px', margin: 0, lineBreak: 'anywhere' }}>선생님이 등록한 단어장 카드를 무작위로 학습합니다.</p>
             </div>
 
             <div className="role-select-card" onClick={handleTeacherAccess}>
               <div style={{ fontSize: '40px', marginBottom: '12px' }}>⚙️</div>
               <h2 style={{ fontSize: '20px', margin: '0 0 8px 0', color: '#2b2b2b' }}>설정</h2>
-              <p style={{ color: '#555555', fontSize: '14px', margin: 0, lineBreak: 'anywhere' }}>일자별 학습할 카드 개수와 단어 세트를 정갈하게 생성합니다.</p>
+              <p style={{ color: '#555555', fontSize: '14px', margin: 0, lineBreak: 'anywhere' }}>학습할 단어장의 제목과 단어 세트를 관리하고 생성합니다.</p>
             </div>
           </div>
         </div>
       )}
 
+      {/* 비밀번호 보호 인증 모달 */}
       {showPasswordModal && (
         <div className="dashboard-box" style={{ textAlign: 'center' }}>
           <h3 style={{ margin: '0 0 12px 0', color: '#2b2b2b', fontSize: '20px' }}>🔑 설정 인증</h3>
@@ -148,114 +182,161 @@ function App() {
         </div>
       )}
 
+      {/* ==================== 1. 👨‍🏫 TEACHER MODE UI ==================== */}
       {currentMode === 'teacher' && !showPasswordModal && (
         <div className="dashboard-box">
-          <h2 style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '6px', fontSize: '20px', margin: '0 0 12px 0', color: '#2b2b2b', fontWeight: '700' }}>
-            <span style={{ display: 'inline-flex', alignItems: 'center' }}>⚙️ 설정</span>
-            <span style={{ color: '#d4ccb6', display: 'inline-flex', alignItems: 'center', transform: 'translateY(-1px)', padding: '0 4px' }}>:</span>
-            <span style={{ display: 'inline-flex', alignItems: 'center' }}>카드 생성</span>
+          <h2 style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '6px', fontSize: '20px', margin: '0 0 16px 0', color: '#2b2b2b', fontWeight: '700' }}>
+            <span style={{ display: 'inline-flex', alignItems: 'center' }}>⚙️ 단어장 설정</span>
           </h2>
-          
-          <div className="step-indicator">
-            <div className={`step-dot ${teacherStep === 1 ? 'active' : ''}`}>1단계: 개수 설정</div>
-            <div style={{ color: '#d4ccb6', fontSize: '12px', userSelect: 'none', display: 'inline-flex', alignItems: 'center', transform: 'translateY(-0.5px)' }}>▶</div>
-            <div className={`step-dot ${teacherStep === 2 ? 'active' : ''}`}>2단계: 단어 입력</div>
+
+          <div style={{ display: 'flex', gap: '12px', marginBottom: '24px' }}>
+            <button 
+              onClick={() => { setTeacherView('create'); setTeacherStep(1); }}
+              style={{ flex: 1, padding: '14px 0', borderRadius: '10px', fontWeight: '700', fontSize: '14px', border: '2px solid #a73838', background: teacherView === 'create' ? '#a73838' : '#ffffff', color: teacherView === 'create' ? '#ffffff' : '#a73838', cursor: 'pointer', transition: 'all 0.2s' }}
+            >
+              ✨ 단어장 생성
+            </button>
+            <button 
+              onClick={() => { setTeacherView('manage'); fetchDeckList(); }}
+              style={{ flex: 1, padding: '14px 0', borderRadius: '10px', fontWeight: '700', fontSize: '14px', border: '2px solid #a73838', background: teacherView === 'manage' ? '#a73838' : '#ffffff', color: teacherView === 'manage' ? '#ffffff' : '#a73838', cursor: 'pointer', transition: 'all 0.2s' }}
+            >
+              🗑️ 단어장 관리
+            </button>
           </div>
 
-          {teacherStep === 1 ? (
-            <div style={{ textAlign: 'center', padding: '12px 0' }}>
-              <div style={{ marginBottom: '24px' }}>
-                <label style={{ display: 'block', color: '#555555', fontSize: '14px', fontWeight: 'bold', marginBottom: '10px' }}>TARGET DATE</label>
-                <input 
-                  type="date" 
-                  value={teacherDate} 
-                  onChange={(e) => setTeacherDate(e.target.value)} 
-                  style={{ background: '#ffffff', color: '#2b2b2b', border: '2px solid #e6dec9', padding: '16px', borderRadius: '12px', fontSize: '16px', outline: 'none', textAlign: 'center', width: '100%', maxWidth: '240px', boxSizing: 'border-box' }}
-                />
+          {teacherView === 'create' ? (
+            <>
+              <div className="step-indicator">
+                <div className={`step-dot ${teacherStep === 1 ? 'active' : ''}`}>1단계: 개수 설정</div>
+                <div style={{ color: '#d4ccb6', fontSize: '12px', userSelect: 'none', display: 'inline-flex', alignItems: 'center', transform: 'translateY(-0.5px)' }}>▶</div>
+                <div className={`step-dot ${teacherStep === 2 ? 'active' : ''}`}>2단계: 단어 입력</div>
               </div>
 
-              <div style={{ marginBottom: '36px' }}>
-                <label style={{ display: 'block', color: '#555555', fontSize: '14px', fontWeight: 'bold', marginBottom: '10px' }}>CARD COUNT (개수 지정)</label>
-                <input 
-                  type="number" 
-                  value={cardCount} 
-                  min="1" 
-                  max="50"
-                  onChange={(e) => setCardCount(e.target.value)} 
-                  style={{ background: '#ffffff', color: '#2b2b2b', border: '2px solid #e6dec9', padding: '16px', borderRadius: '12px', fontSize: '18px', outline: 'none', textAlign: 'center', width: '100%', maxWidth: '140px', boxSizing: 'border-box' }}
-                />
-                <p style={{ color: '#555555', fontSize: '13px', marginTop: '12px', marginBreak: 'anywhere' }}>오늘 배울 단어들의 총 수량을 정합니다.</p>
-              </div>
-
-              <button onClick={proceedToStep2} className="mini-start-btn" style={{ padding: '16px 0', borderRadius: '12px', fontSize: '16px' }}>
-                다음 단계로 이동 ➡️
-              </button>
-            </div>
-          ) : (
-            <div>
-              <p style={{ color: '#2b2b2b', fontSize: '14px', textAlign: 'center', marginBottom: '24px' }}>
-                {teacherDate} 세트에 들어갈 <b style={{ color: '#a73838' }}>{cardCount}개</b>의 단어 쌍을 입력하세요.
-              </p>
-              
-              <div style={{ maxHeight: '400px', overflowY: 'auto', paddingRight: '8px', marginBottom: '24px' }}>
-                {inputWords.map((word, idx) => (
-                  <div key={idx} className="word-input-row" style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '12px' }}>
-                    <span style={{ color: '#555555', fontSize: '14px', width: '22px', fontWeight: 'bold', flexShrink: 0 }}>{idx + 1}</span>
+              {teacherStep === 1 ? (
+                <div style={{ textAlign: 'center', padding: '12px 0' }}>
+                  <div style={{ marginBottom: '24px' }}>
+                    <label style={{ display: 'block', color: '#555555', fontSize: '14px', fontWeight: 'bold', marginBottom: '10px' }}>DECK TITLE (단어장 제목)</label>
                     <input 
-                      placeholder="일본어 표기" 
-                      value={word.kanji} 
-                      onChange={e => {
-                        const newWords = [...inputWords];
-                        newWords[idx] = { ...newWords[idx], kanji: e.target.value };
-                        setInputWords(newWords);
-                      }}
-                      style={{ flex: 1, minWidth: '0', background: '#ffffff', border: '1px solid #cbd5e1', color: '#2b2b2b', padding: '14px', borderRadius: '10px', fontSize: '15px', outline: 'none', boxSizing: 'border-box' }}
-                    />
-                    <input 
-                      placeholder="한국어 뜻" 
-                      value={word.meaning} 
-                      onChange={e => {
-                        const newWords = [...inputWords];
-                        newWords[idx] = { ...newWords[idx], meaning: e.target.value };
-                        setInputWords(newWords);
-                      }}
-                      style={{ flex: 1, minWidth: '0', background: '#ffffff', border: '1px solid #cbd5e1', color: '#2b2b2b', padding: '14px', borderRadius: '10px', fontSize: '15px', outline: 'none', boxSizing: 'border-box' }}
+                      type="text" 
+                      value={deckTitle} 
+                      onChange={(e) => setDeckTitle(e.target.value)} 
+                      placeholder="예: 1단원 핵심 복습"
+                      style={{ background: '#ffffff', color: '#2b2b2b', border: '2px solid #e6dec9', padding: '16px', borderRadius: '12px', fontSize: '16px', outline: 'none', textAlign: 'center', width: '100%', maxWidth: '240px', boxSizing: 'border-box' }}
                     />
                   </div>
-                ))}
-              </div>
 
-              <div style={{ display: 'flex', gap: '12px', width: '100%' }}>
-                <button onClick={() => setTeacherStep(1)} style={{ background: '#ebe6dc', color: '#2b2b2b', border: '1px solid #d4ccb6', padding: '16px', borderRadius: '12px', cursor: 'pointer', fontWeight: 'bold', whiteSpace: 'nowrap', fontSize: '15px' }}>
-                  이전으로
-                </button>
-                <button onClick={handleSaveDeck} style={{ flex: 1, background: '#a73838', color: '#fff', border: 'none', padding: '16px', borderRadius: '12px', fontSize: '16px', fontWeight: 'bold', cursor: 'pointer', boxShadow: '0 4px 14px rgba(167, 58, 237, 0.15)' }}>
-                  최종 덱 업로드 🚀
-                </button>
+                  <div style={{ marginBottom: '36px' }}>
+                    <label style={{ display: 'block', color: '#555555', fontSize: '14px', fontWeight: 'bold', marginBottom: '10px' }}>CARD COUNT (개수 지정)</label>
+                    <input 
+                      type="number" 
+                      value={cardCount} 
+                      min="1" 
+                      max="50"
+                      onChange={(e) => setCardCount(e.target.value)} 
+                      style={{ background: '#ffffff', color: '#2b2b2b', border: '2px solid #e6dec9', padding: '16px', borderRadius: '12px', fontSize: '18px', outline: 'none', textAlign: 'center', width: '100%', maxWidth: '140px', boxSizing: 'border-box' }}
+                    />
+                    <p style={{ color: '#555555', fontSize: '13px', marginTop: '12px', marginBreak: 'anywhere' }}>오늘 배울 단어들의 총 수량을 정합니다.</p>
+                  </div>
+
+                  <button onClick={proceedToStep2} className="mini-start-btn" style={{ padding: '16px 0', borderRadius: '12px', fontSize: '16px' }}>
+                    다음 단계로 이동 ➡️
+                  </button>
+                </div>
+              ) : (
+                <div>
+                  <p style={{ color: '#2b2b2b', fontSize: '14px', textAlign: 'center', marginBottom: '24px' }}>
+                    <b style={{ color: '#a73838' }}>"{deckTitle}"</b> 세트에 들어갈 <b>{cardCount}개</b>의 단어 쌍을 입력하세요.
+                  </p>
+                  
+                  <div style={{ maxHeight: '400px', overflowY: 'auto', paddingRight: '8px', marginBottom: '24px' }}>
+                    {inputWords.map((word, idx) => (
+                      <div key={idx} className="word-input-row" style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '12px' }}>
+                        <span style={{ color: '#555555', fontSize: '14px', width: '22px', fontWeight: 'bold', flexShrink: 0 }}>{idx + 1}</span>
+                        <input 
+                          placeholder="일본어 표기" 
+                          value={word.kanji} 
+                          onChange={e => {
+                            const newWords = [...inputWords];
+                            newWords[idx] = { ...newWords[idx], kanji: e.target.value };
+                            setInputWords(newWords);
+                          }}
+                          style={{ flex: 1, minWidth: '0', background: '#ffffff', border: '1px solid #cbd5e1', color: '#2b2b2b', padding: '14px', borderRadius: '10px', fontSize: '15px', outline: 'none', boxSizing: 'border-box' }}
+                        />
+                        <input 
+                          placeholder="한국어 뜻" 
+                          value={word.meaning} 
+                          onChange={e => {
+                            const newWords = [...inputWords];
+                            newWords[idx] = { ...newWords[idx], meaning: e.target.value };
+                            setInputWords(newWords);
+                          }}
+                          style={{ flex: 1, minWidth: '0', background: '#ffffff', border: '1px solid #cbd5e1', color: '#2b2b2b', padding: '14px', borderRadius: '10px', fontSize: '15px', outline: 'none', boxSizing: 'border-box' }}
+                        />
+                      </div>
+                    ))}
+                  </div>
+
+                  <div style={{ display: 'flex', gap: '12px', width: '100%' }}>
+                    <button onClick={() => setTeacherStep(1)} style={{ background: '#ebe6dc', color: '#2b2b2b', border: '1px solid #d4ccb6', padding: '16px', borderRadius: '12px', cursor: 'pointer', fontWeight: 'bold', whiteSpace: 'nowrap', fontSize: '15px' }}>
+                      이전으로
+                    </button>
+                    <button onClick={handleSaveDeck} style={{ flex: 1, background: '#a73838', color: '#fff', border: 'none', padding: '16px', borderRadius: '12px', fontSize: '16px', fontWeight: 'bold', cursor: 'pointer', boxShadow: '0 4px 14px rgba(167, 58, 237, 0.15)' }}>
+                      최종 덱 업로드 🚀
+                    </button>
+                  </div>
+                </div>
+              )}
+            </>
+          ) : (
+            <div>
+              <p style={{ color: '#555555', fontSize: '14px', textAlign: 'center', marginBottom: '20px' }}>
+                기존에 생성된 단어장 목록입니다. 불필요한 단어장을 삭제할 수 있습니다.
+              </p>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', maxHeight: '400px', overflowY: 'auto', paddingRight: '5px' }}>
+                {deckList.length === 0 ? (
+                  <div style={{ textAlign: 'center', padding: '30px 0', color: '#888', fontSize: '14px' }}>
+                    등록된 단어장이 없습니다.
+                  </div>
+                ) : (
+                  deckList.map((deck) => (
+                    <div key={deck.id} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '16px', border: '1px solid #e6dec9', borderRadius: '12px', background: '#fdfcf7' }}>
+                      <span style={{ fontWeight: '700', color: '#2b2b2b', fontSize: '15px', wordBreak: 'keep-all', paddingRight: '10px' }}>
+                        {deck.date}
+                      </span>
+                      <button 
+                        onClick={() => handleDeleteDeck(deck.id)} 
+                        style={{ background: '#e04f4f', color: '#ffffff', border: 'none', padding: '8px 14px', borderRadius: '8px', fontWeight: '700', fontSize: '13px', cursor: 'pointer', whiteSpace: 'nowrap', flexShrink: 0 }}
+                      >
+                        삭제
+                      </button>
+                    </div>
+                  ))
+                )}
               </div>
             </div>
           )}
         </div>
       )}
 
+      {/* ==================== 2. 🎒 STUDENT MODE UI ==================== */}
       {currentMode === 'student' && !showPasswordModal && (
         <div className="dashboard-box">
           {!hasStarted ? (
             <div style={{ width: '100%' }}>
               <h2 style={{ fontSize: '20px', marginBottom: '10px', color: '#2b2b2b' }}>📜 플래시 카드 선택</h2>
-              <p style={{ color: '#555555', fontSize: '14px', margin: '0 0 24px 0' }}>학습할 일자의 카드 세트를 선택해 주세요.</p>
+              <p style={{ color: '#555555', fontSize: '14px', margin: '0 0 24px 0' }}>학습할 단어장 세트를 선택해 주세요.</p>
               
               <div className="date-grid">
-                {dateList.map((item) => (
-                  <div key={item.date} className="date-card">
-                    <div className="date-label">{item.date}</div>
-                    <button onClick={() => startLearning(item.date)} className="mini-start-btn" style={{ padding: '12px 0', fontSize: '15px' }}>
+                {deckList.map((item) => (
+                  <div key={item.id} className="date-card">
+                    <div className="date-label" style={{ wordBreak: 'keep-all' }}>{item.date}</div>
+                    <button onClick={() => startLearning(item.id)} className="mini-start-btn" style={{ padding: '12px 0', fontSize: '15px' }}>
                       시작
                     </button>
                   </div>
                 ))}
-                {dateList.length === 0 && (
-                  <p style={{ color: '#555555', fontSize: '15px', gridColumn: '1/-1', textAlign: 'center', padding: '30px 0' }}>등록된 카드 세트가 아직 없습니다.</p>
+                {deckList.length === 0 && (
+                  <p style={{ color: '#555555', fontSize: '15px', gridColumn: '1/-1', textAlign: 'center', padding: '30px 0' }}>등록된 단어장이 아직 없습니다.</p>
                 )}
               </div>
             </div>
@@ -307,10 +388,11 @@ function App() {
                 </button>
               </div>
             ) : (
-              <div style={{ textAlign: 'center', padding: '50px 0' }}>
+              <div style={{ textAlign: 'center', padding: '40px 0' }}>
                 <div style={{ fontSize: '56px', marginBottom: '20px' }}>🌸</div>
                 <h3 style={{ fontSize: '24px', margin: '0 0 12px 0', color: '#a73838', letterSpacing: '-0.5px' }}>학습 완료!</h3>
-                <p style={{ color: '#555555', fontSize: '15px', marginBottom: '32px' }}>오늘의 서책 단어들을 모두 완벽히 마스터했습니다.</p>
+                {/* ⛩️ "서책 단어" -> "단어장 단어" 로 수정 */}
+                <p style={{ color: '#555555', fontSize: '15px', marginBottom: '32px' }}>오늘의 단어장 단어들을 모두 완벽히 마스터했습니다.</p>
                 <button 
                   onClick={() => setHasStarted(false)} 
                   style={{ background: '#ebe6dc', color: '#2b2b2b', border: '1px solid #d4ccb6', padding: '16px 36px', borderRadius: '28px', cursor: 'pointer', fontWeight: '700', fontSize: '16px' }}
