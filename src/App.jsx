@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { supabase } from './supabaseClient';
 import './index.css';
-import './App.css'; // App.css 스타일 파일 연동 확인
+import './App.css';
 
 function App() {
   const [currentMode, setCurrentMode] = useState('landing');
@@ -14,12 +14,16 @@ function App() {
   const [cardCount, setCardCount] = useState(15);
   const [deckTitle, setDeckTitle] = useState('');
   const [inputWords, setInputWords] = useState([]);
+  // 순서 반전 여부 상태 (false = 일->한, true = 한->일)
+  const [isOrderSwapped, setIsOrderSwapped] = useState(false);
 
   const [deckList, setDeckList] = useState([]); 
   const [words, setWords] = useState([]);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isFlipped, setIsFlipped] = useState(false);
   const [hasStarted, setHasStarted] = useState(false);
+  // 학생이 학습할 때 해당 단어장이 반전형인지 인지하는 상태
+  const [isDeckSwapped, setIsDeckSwapped] = useState(false);
 
   const TEACHER_PASSWORD = import.meta.env.VITE_TEACHER_PASSWORD || "1234";
 
@@ -44,10 +48,11 @@ function App() {
       setShowPasswordModal(false);
       setPasswordInput('');
       setCurrentMode('teacher');
-      setTeacherView('create'); // 설정 진입 시 기본은 생성 탭
+      setTeacherView('create'); 
       setTeacherStep(1);
       setDeckTitle(''); 
       setCardCount(15);
+      setIsOrderSwapped(false); 
     } else {
       alert("❌ 비밀번호가 일치하지 않습니다.");
     }
@@ -73,9 +78,11 @@ function App() {
       return;
     }
 
-    const setId = deckTitle.trim();
+    const cleanTitle = deckTitle.trim();
+    const setId = cleanTitle + (isOrderSwapped ? '_swapped' : '_normal');
+    const displayTitle = cleanTitle + (isOrderSwapped ? ' [한 ➡️ 일]' : ' [일 ➡️ 한]');
 
-    const { error: setErr } = await supabase.from('word_sets').upsert({ id: setId, date: setId });
+    const { error: setErr } = await supabase.from('word_sets').upsert({ id: setId, date: displayTitle });
     if (setErr) {
       console.error(setErr);
       return alert("❌ 저장 오류 발생! Supabase word_sets 테이블 설정을 확인해주세요.");
@@ -94,7 +101,7 @@ function App() {
   };
 
   const handleDeleteDeck = async (deckId) => {
-    const isConfirm = window.confirm(`정말 "${deckId}" 단어장을 삭제하시겠습니까?\n포함된 모든 단어가 함께 영구 삭제됩니다.`);
+    const isConfirm = window.confirm(`정말 삭제하시겠습니까?\n포함된 모든 단어가 함께 영구 삭제됩니다.`);
     if (!isConfirm) return;
 
     await supabase.from('words').delete().eq('set_id', deckId);
@@ -117,19 +124,19 @@ function App() {
       setWords(shuffled);
       setCurrentIndex(0);
       setIsFlipped(false);
+      setIsDeckSwapped(deckId.endsWith('_swapped'));
       setHasStarted(true);
     } else {
       alert("🫙 해당 단어장에 생성된 카드가 없습니다.");
     }
   };
 
-  // ⛩️ 추가: 일본어 TTS 음성 합성 함수 구현
   const speakJapanese = (text) => {
     if ('speechSynthesis' in window) {
-      window.speechSynthesis.cancel(); // 이전 음성 초기화 및 끊김 방지
+      window.speechSynthesis.cancel(); 
       const utterance = new SpeechSynthesisUtterance(text);
-      utterance.lang = 'ja-JP'; // 음성 언어 일본어 할당
-      utterance.rate = 0.85;    // 학습에 이상적인 원어민 발음 속도 지정
+      utterance.lang = 'ja-JP'; 
+      utterance.rate = 0.85;    
       window.speechSynthesis.speak(utterance);
     } else {
       alert("⚠️ 이 브라우저는 음성 재생 기능을 지원하지 않습니다.");
@@ -153,7 +160,7 @@ function App() {
         </div>
       )}
 
-      {/* ==================== 0. LANDING VIEW (첫 화면 역할 선택) ==================== */}
+      {/* ==================== 0. LANDING VIEW ==================== */}
       {currentMode === 'landing' && !showPasswordModal && (
         <div style={{ width: '100%' }}>
           <h1 style={{ textAlign: 'center', fontSize: '26px', marginBottom: '32px', fontWeight: '800', letterSpacing: '-0.5px', color: '#2b2b2b' }}>
@@ -257,34 +264,72 @@ function App() {
                 </div>
               ) : (
                 <div>
-                  <p style={{ color: '#2b2b2b', fontSize: '14px', textAlign: 'center', marginBottom: '24px' }}>
+                  <p style={{ color: '#2b2b2b', fontSize: '14px', textAlign: 'center', marginBottom: '16px' }}>
                     <b style={{ color: '#a73838' }}>"{deckTitle}"</b> 세트에 들어갈 <b>{cardCount}개</b>의 단어 쌍을 입력하세요.
                   </p>
+                  
+                  <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '20px' }}>
+                    <button
+                      onClick={() => setIsOrderSwapped(!isOrderSwapped)}
+                      style={{ background: isOrderSwapped ? '#1b2a4a' : '#ffffff', color: isOrderSwapped ? '#ffffff' : '#1b2a4a', border: '2px solid #1b2a4a', padding: '10px 16px', borderRadius: '20px', fontSize: '14px', fontWeight: '700', cursor: 'pointer', transition: 'all 0.2s' }}
+                    >
+                      {isOrderSwapped ? "🔄 카드 순서: 한국어 뜻 ➡️ 일본어 표기" : "🔄 카드 순서: 일본어 표기 ➡️ 한국어 뜻"}
+                    </button>
+                  </div>
                   
                   <div style={{ maxHeight: '400px', overflowY: 'auto', paddingRight: '8px', marginBottom: '24px' }}>
                     {inputWords.map((word, idx) => (
                       <div key={idx} className="word-input-row" style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '12px' }}>
                         <span style={{ color: '#555555', fontSize: '14px', width: '22px', fontWeight: 'bold', flexShrink: 0 }}>{idx + 1}</span>
-                        <input 
-                          placeholder="일본어 표기" 
-                          value={word.kanji} 
-                          onChange={e => {
-                            const newWords = [...inputWords];
-                            newWords[idx] = { ...newWords[idx], kanji: e.target.value };
-                            setInputWords(newWords);
-                          }}
-                          style={{ flex: 1, minWidth: '0', background: '#ffffff', border: '1px solid #cbd5e1', color: '#2b2b2b', padding: '14px', borderRadius: '10px', fontSize: '15px', outline: 'none', boxSizing: 'border-box' }}
-                        />
-                        <input 
-                          placeholder="한국어 뜻" 
-                          value={word.meaning} 
-                          onChange={e => {
-                            const newWords = [...inputWords];
-                            newWords[idx] = { ...newWords[idx], meaning: e.target.value };
-                            setInputWords(newWords);
-                          }}
-                          style={{ flex: 1, minWidth: '0', background: '#ffffff', border: '1px solid #cbd5e1', color: '#2b2b2b', padding: '14px', borderRadius: '10px', fontSize: '15px', outline: 'none', boxSizing: 'border-box' }}
-                        />
+                        
+                        {/* ⛩️ [핵심 수정]: 토글 상태(isOrderSwapped)에 따라 입력창 배치 구조 동적 반전 */}
+                        {isOrderSwapped ? (
+                          <>
+                            <input 
+                              placeholder="한국어 뜻" 
+                              value={word.meaning} 
+                              onChange={e => {
+                                const newWords = [...inputWords];
+                                newWords[idx] = { ...newWords[idx], meaning: e.target.value };
+                                setInputWords(newWords);
+                              }}
+                              style={{ flex: 1, minWidth: '0', background: '#ffffff', border: '1px solid #cbd5e1', color: '#2b2b2b', padding: '14px', borderRadius: '10px', fontSize: '15px', outline: 'none', boxSizing: 'border-box' }}
+                            />
+                            <input 
+                              placeholder="일본어 표기" 
+                              value={word.kanji} 
+                              onChange={e => {
+                                const newWords = [...inputWords];
+                                newWords[idx] = { ...newWords[idx], kanji: e.target.value };
+                                setInputWords(newWords);
+                              }}
+                              style={{ flex: 1, minWidth: '0', background: '#ffffff', border: '1px solid #cbd5e1', color: '#2b2b2b', padding: '14px', borderRadius: '10px', fontSize: '15px', outline: 'none', boxSizing: 'border-box' }}
+                            />
+                          </>
+                        ) : (
+                          <>
+                            <input 
+                              placeholder="일본어 표기" 
+                              value={word.kanji} 
+                              onChange={e => {
+                                const newWords = [...inputWords];
+                                newWords[idx] = { ...newWords[idx], kanji: e.target.value };
+                                setInputWords(newWords);
+                              }}
+                              style={{ flex: 1, minWidth: '0', background: '#ffffff', border: '1px solid #cbd5e1', color: '#2b2b2b', padding: '14px', borderRadius: '10px', fontSize: '15px', outline: 'none', boxSizing: 'border-box' }}
+                            />
+                            <input 
+                              placeholder="한국어 뜻" 
+                              value={word.meaning} 
+                              onChange={e => {
+                                const newWords = [...inputWords];
+                                newWords[idx] = { ...newWords[idx], meaning: e.target.value };
+                                setInputWords(newWords);
+                              }}
+                              style={{ flex: 1, minWidth: '0', background: '#ffffff', border: '1px solid #cbd5e1', color: '#2b2b2b', padding: '14px', borderRadius: '10px', fontSize: '15px', outline: 'none', boxSizing: 'border-box' }}
+                            />
+                          </>
+                        )}
                       </div>
                     ))}
                   </div>
@@ -368,25 +413,47 @@ function App() {
                 <div className={`card-container ${isFlipped ? 'flipped' : ''}`} onClick={() => setIsFlipped(!isFlipped)}>
                   <div className="card-inner">
                     <div className="card-front">
-                      <span style={{ fontSize: '16px', fontWeight: '700', color: '#888', letterSpacing: '2px', position: 'absolute', top: '20px' }}>JAPANESE</span>
+                      <span style={{ fontSize: '16px', fontWeight: '700', color: '#888', letterSpacing: '2px', position: 'absolute', top: '20px' }}>
+                        {isDeckSwapped ? "MEANING" : "JAPANESE"}
+                      </span>
                       
-                      {/* ⛩️ [기능 추가]: 우측 상단 확성기 발음재생 버튼 배치 */}
-                      <button 
-                        className="speak-btn"
-                        onClick={(e) => {
-                          e.stopPropagation(); // 🌟 이벤트 전파를 차단하여 카드가 플립되는 버그 원천차단
-                          speakJapanese(words[currentIndex].kanji);
-                        }}
-                      >
-                        🔊
-                      </button>
+                      {!isDeckSwapped && (
+                        <button 
+                          className="speak-btn"
+                          onClick={(e) => {
+                            e.stopPropagation(); 
+                            speakJapanese(words[currentIndex].kanji);
+                          }}
+                        >
+                          🔊
+                        </button>
+                      )}
 
-                      <div className="word-text">{words[currentIndex].kanji}</div>
+                      <div className="word-text">
+                        {isDeckSwapped ? words[currentIndex].meaning : words[currentIndex].kanji}
+                      </div>
                       <span style={{ fontSize: '14px', color: '#94a3b8', position: 'absolute', bottom: '20px', fontWeight: '500' }}>터치해서 뒤집기 🌸</span>
                     </div>
                     <div className="card-back">
-                      <span style={{ fontSize: '16px', fontWeight: '700', color: 'rgba(255,255,255,0.5)', letterSpacing: '2px', position: 'absolute', top: '20px' }}>MEANING</span>
-                      <div className="word-text">{words[currentIndex].meaning}</div>
+                      <span style={{ fontSize: '16px', fontWeight: '700', color: 'rgba(255,255,255,0.5)', letterSpacing: '2px', position: 'absolute', top: '20px' }}>
+                        {isDeckSwapped ? "JAPANESE" : "MEANING"}
+                      </span>
+
+                      {isDeckSwapped && (
+                        <button 
+                          className="speak-btn"
+                          onClick={(e) => {
+                            e.stopPropagation(); 
+                            speakJapanese(words[currentIndex].kanji);
+                          }}
+                        >
+                          🔊
+                        </button>
+                      )}
+
+                      <div className="word-text">
+                        {isDeckSwapped ? words[currentIndex].kanji : words[currentIndex].meaning}
+                      </div>
                       <span style={{ fontSize: '14px', color: 'rgba(255,255,255,0.4)', position: 'absolute', bottom: '20px', fontWeight: '500' }}>터치해서 돌아가기 ↩️</span>
                     </div>
                   </div>
