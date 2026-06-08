@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { supabase } from './supabaseClient';
 import './index.css';
+import './App.css'; // App.css 스타일 파일 연동 확인
 
 function App() {
   const [currentMode, setCurrentMode] = useState('landing');
@@ -122,6 +123,19 @@ function App() {
     }
   };
 
+  // ⛩️ 추가: 일본어 TTS 음성 합성 함수 구현
+  const speakJapanese = (text) => {
+    if ('speechSynthesis' in window) {
+      window.speechSynthesis.cancel(); // 이전 음성 초기화 및 끊김 방지
+      const utterance = new SpeechSynthesisUtterance(text);
+      utterance.lang = 'ja-JP'; // 음성 언어 일본어 할당
+      utterance.rate = 0.85;    // 학습에 이상적인 원어민 발음 속도 지정
+      window.speechSynthesis.speak(utterance);
+    } else {
+      alert("⚠️ 이 브라우저는 음성 재생 기능을 지원하지 않습니다.");
+    }
+  };
+
   const progressPercent = words.length > 0 ? (currentIndex / words.length) * 100 : 0;
 
   return (
@@ -149,7 +163,6 @@ function App() {
             <div className="role-select-card" onClick={() => setCurrentMode('student')}>
               <div style={{ fontSize: '40px', marginBottom: '12px' }}>👥</div>
               <h2 style={{ fontSize: '20px', margin: '0 0 8px 0', color: '#a73838' }}>학생 입장</h2>
-              {/* ⛩️ "서책 카드" -> "단어장 카드" 로 수정 */}
               <p style={{ color: '#555555', fontSize: '14px', margin: 0, lineBreak: 'anywhere' }}>선생님이 등록한 단어장 카드를 무작위로 학습합니다.</p>
             </div>
 
@@ -356,6 +369,18 @@ function App() {
                   <div className="card-inner">
                     <div className="card-front">
                       <span style={{ fontSize: '16px', fontWeight: '700', color: '#888', letterSpacing: '2px', position: 'absolute', top: '20px' }}>JAPANESE</span>
+                      
+                      {/* ⛩️ [기능 추가]: 우측 상단 확성기 발음재생 버튼 배치 */}
+                      <button 
+                        className="speak-btn"
+                        onClick={(e) => {
+                          e.stopPropagation(); // 🌟 이벤트 전파를 차단하여 카드가 플립되는 버그 원천차단
+                          speakJapanese(words[currentIndex].kanji);
+                        }}
+                      >
+                        🔊
+                      </button>
+
                       <div className="word-text">{words[currentIndex].kanji}</div>
                       <span style={{ fontSize: '14px', color: '#94a3b8', position: 'absolute', bottom: '20px', fontWeight: '500' }}>터치해서 뒤집기 🌸</span>
                     </div>
@@ -391,7 +416,6 @@ function App() {
               <div style={{ textAlign: 'center', padding: '40px 0' }}>
                 <div style={{ fontSize: '56px', marginBottom: '20px' }}>🌸</div>
                 <h3 style={{ fontSize: '24px', margin: '0 0 12px 0', color: '#a73838', letterSpacing: '-0.5px' }}>학습 완료!</h3>
-                {/* ⛩️ "서책 단어" -> "단어장 단어" 로 수정 */}
                 <p style={{ color: '#555555', fontSize: '15px', marginBottom: '32px' }}>오늘의 단어장 단어들을 모두 완벽히 마스터했습니다.</p>
                 <button 
                   onClick={() => setHasStarted(false)} 

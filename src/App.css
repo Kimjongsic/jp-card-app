@@ -182,3 +182,35 @@
     border-right-color: var(--border);
   }
 }
+
+/* ⛩️ [스타일 추가]: 단어장 오른쪽 위에 확성기 버튼 정밀 배치 */
+.speak-btn {
+  position: absolute;
+  top: 14px;
+  right: 16px;
+  background: #fdfcf7;         /* 앱의 기본 와시 종이 톤과 어울리는 부드러운 아이보리 */
+  border: 1px solid #e6dec9;
+  border-radius: 50%;          /* 완전한 원형 단추 디자인 */
+  width: 40px;                 /* 스마트폰 터치 실수를 줄여주는 쾌적한 크기 보장 */
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 18px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+  z-index: 10;                 /* 카드 위에 무조건 보이도록 레이어 인덱스 설정 */
+  transition: all 0.2s ease-in-out;
+  -webkit-tap-highlight-color: transparent; /* 모바일 터치 시 푸른 잔상 제거 */
+}
+
+/* 마우스 호버 및 모바일 터치 시 피드백 이펙트 */
+.speak-btn:hover {
+  background: #ffffff;
+  transform: scale(1.06);
+  border-color: #a73838;       /* 포인트 컬러인 신사 도리이 적색 연동 */
+}
+
+.speak-btn:active {
+  transform: scale(0.94);      /* 버튼을 누를 때 쫀득하게 눌리는 효과 제공 */
+}
